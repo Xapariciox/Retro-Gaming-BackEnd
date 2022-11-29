@@ -1,8 +1,9 @@
 import http from 'http';
+import createDebug from 'debug';
 import { app } from './app.js';
 import { dbConnect } from './db.connect.js';
-
 import { CustomError } from './interfaces/error';
+const debug = createDebug('projectBack');
 
 const port = process.env.PORT || 4000;
 const server = http.createServer(app);
@@ -18,7 +19,7 @@ server.on('listening', () => {
                 ? `http://localhost:${addr?.port}`
                 : `port ${addr?.port}`;
     }
-    console.log(`Listening on ${bind}`);
+    debug(`Listening on ${bind}`);
 });
 
 server.on('error', (error: CustomError, response: http.ServerResponse) => {
@@ -28,5 +29,9 @@ server.on('error', (error: CustomError, response: http.ServerResponse) => {
     response.end();
 });
 
-dbConnect().then(() => server.listen(port));
-//falta el .catch
+dbConnect()
+    .then((mongoose) => {
+        debug('DB:', mongoose.connection.db.databaseName);
+        server.listen(port);
+    })
+    .catch((error) => server.emit(error));
