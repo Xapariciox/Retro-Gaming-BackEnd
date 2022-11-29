@@ -5,5 +5,6 @@ export async function dbConnect() {
     const DBName =
         process.env.NODE_ENV !== 'test' ? 'Proyecto-Final' : 'testing';
     const uri = `mongodb+srv://${USER}:${PASSWORD}@cluster0.yswmjv0.mongodb.net/${DBName}?retryWrites=true&w=majority`;
-    return await mongoose.connect(uri);
+    return mongoose.connect(uri);
 }
+dbConnect().then((data) => console.log(data.connection.name));
