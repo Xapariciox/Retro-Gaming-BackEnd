@@ -21,7 +21,6 @@ export const createToken = (payload: TokenPayload) => {
 
 export const readToken = (token: string) => {
     const payload = jwt.verify(token, getSecret());
-    //if (typeof payload === 'string') throw new Error('Token not valid');
     return payload as jwt.JwtPayload;
 };
 
