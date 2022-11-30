@@ -16,8 +16,6 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         return [data[0].id, data[1].id];
     };
     const repository = UserRepository.getInstance();
-
-    const badFormattedId = '1';
     const invalidId = '537b422da27b69c98b1916e1aa';
     let testIds: Array<string>;
 
@@ -62,7 +60,7 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         test('Then, if the data has been valid, it should be returned the new user', async () => {
             const newUser = {
                 name: 'Carlos',
-                password: '12345',
+                password: 'asa',
                 email: 'alonso@gmail.com',
             };
             const result = await repository.create(newUser);
@@ -71,9 +69,9 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         });
         test('Then, if the data has been valid but without date, it should be returned the new user', async () => {
             const newUser = {
-                name: 'Carlos',
-                password: '12345',
-                email: 'alonso2@gmail.com',
+                name: 'Ricardo',
+                password: 'dsddsdf',
+                email: 'ricardo@gmail.com',
             };
             const result = await repository.create(newUser);
             expect(spyModel).toHaveBeenCalled();
@@ -81,9 +79,9 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         });
         test('Then, if the data has been valid but with invalid date, it should be returned the new user', async () => {
             const newUser = {
-                name: 'Carlos',
+                name: '23dwfw',
                 password: '12345',
-                email: 'alonso3@gmail.com',
+                email: 'amark@gmail.com',
             };
             const result = await repository.create(newUser);
             expect(spyModel).toHaveBeenCalled();
