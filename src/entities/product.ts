@@ -4,7 +4,7 @@ export type ProductI = {
     name: string;
     image: string;
     date: Date;
-    Description: string;
+    description: string;
     stock: number;
     brand: string;
     price: number;
@@ -14,7 +14,7 @@ export type ProtoProduct = {
     name?: string;
     image?: string;
     date?: Date;
-    Description?: string;
+    description?: string;
     stock?: number;
     brand?: string;
     price?: number;
@@ -31,9 +31,11 @@ export const productSchema = new Schema<ProductI>({
         required: true,
     },
     date: Date,
-    Description: String,
+    description: String,
     stock: Number,
     brand: String,
+    price: String,
+    category: String,
 });
 
 productSchema.set('toJSON', {

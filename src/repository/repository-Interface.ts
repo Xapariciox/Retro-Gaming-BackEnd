@@ -2,7 +2,7 @@ export type id = number | string;
 
 export interface BasicRepo<T> {
     get: (id: id) => Promise<T>;
-    post: (data: Partial<T>) => Promise<T>;
+    create: (data: Partial<T>) => Promise<T>;
     find: (data: Partial<T>) => Promise<T>;
 }
 

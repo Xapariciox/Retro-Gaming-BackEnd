@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     const origin = req.header('Origin') || '*';
-    res.setHeader('Access-Control-Allow-Origin', origin as string);
+    res.setHeader('Access-Control-Allow-Origin', origin);
     next();
 });
 

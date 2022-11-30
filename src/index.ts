@@ -1,8 +1,8 @@
 import http from 'http';
 import createDebug from 'debug';
 import { app } from './app.js';
-import { dbConnect } from './db.connect.js';
-import { CustomError } from './interfaces/error';
+import { dbConnect } from './db-connect/db.connect.js';
+import { CustomError } from './interfaces/error.js';
 const debug = createDebug('projectBack');
 
 const port = process.env.PORT || 4000;

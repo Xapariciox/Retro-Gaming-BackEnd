@@ -9,9 +9,9 @@ import jwt from 'jsonwebtoken';
 import bc from 'bcryptjs';
 import { SECRET } from '../config.js';
 const mock = {
-    id: '1',
     name: 'Pepe',
-    role: '',
+    password: '12345',
+    email: 'pepe@gmail.com',
 };
 
 describe('Given "getSecret"', () => {
