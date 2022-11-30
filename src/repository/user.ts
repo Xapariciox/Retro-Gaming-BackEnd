@@ -48,6 +48,7 @@ export class UserRepository implements BasicRepo<UserI> {
     delete(id: id): id {
         debug('delete', id);
         this.#Model.findByIdAndDelete(id);
+        //pendiente de revisar
         // if (result === null) throw new Error('Not found id');
         return id;
 

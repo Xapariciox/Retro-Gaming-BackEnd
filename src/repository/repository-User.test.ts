@@ -5,8 +5,8 @@ import { UserRepository } from './user.js';
 
 describe('Given a singleton instance of the class "UserRepository"', () => {
     const mockData = [
-        { name: 'Carlos', password: '12345', email: 'totin@gmail.com' },
-        { name: 'rodrigo', password: '12345', email: 'rodri123n@gmail.com' },
+        { name: 'Carlos', password: 'Robdff', email: 'totin@gmail.com' },
+        { name: 'rodrigo', password: 'ssffdc', email: 'rodri123n@gmail.com' },
     ];
     const setUpCollection = async () => {
         await dbConnect();
