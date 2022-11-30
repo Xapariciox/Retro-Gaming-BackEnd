@@ -57,32 +57,12 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
 
     describe('When it has been run create and it has called Model.create', () => {
         const spyModel = jest.spyOn(User, 'create');
+        const newUser = {
+            name: 'Carlos',
+            password: 'asa',
+            email: 'alonso@gmail.com',
+        };
         test('Then, if the data has been valid, it should be returned the new user', async () => {
-            const newUser = {
-                name: 'Carlos',
-                password: 'asa',
-                email: 'alonso@gmail.com',
-            };
-            const result = await repository.create(newUser);
-            expect(spyModel).toHaveBeenCalled();
-            expect(result.name).toEqual(newUser.name);
-        });
-        test('Then, if the data has been valid but without date, it should be returned the new user', async () => {
-            const newUser = {
-                name: 'Ricardo',
-                password: 'dsddsdf',
-                email: 'ricardo@gmail.com',
-            };
-            const result = await repository.create(newUser);
-            expect(spyModel).toHaveBeenCalled();
-            expect(result.name).toEqual(newUser.name);
-        });
-        test('Then, if the data has been valid but with invalid date, it should be returned the new user', async () => {
-            const newUser = {
-                name: '23dwfw',
-                password: '12345',
-                email: 'amark@gmail.com',
-            };
             const result = await repository.create(newUser);
             expect(spyModel).toHaveBeenCalled();
             expect(result.name).toEqual(newUser.name);
