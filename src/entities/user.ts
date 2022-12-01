@@ -6,8 +6,13 @@ export type UserI = {
     email: string;
     imageProfile: string;
     password: string;
-    purchasedProducts: Array<Types.ObjectId>;
-    Favorites: Array<Types.ObjectId>;
+    purchasedProducts: [
+        {
+            productID: Types.ObjectId;
+            amount: number;
+        }
+    ];
+    favorites: Array<Types.ObjectId>;
     cart: [
         {
             productID: Types.ObjectId;
@@ -20,8 +25,13 @@ export type ProtoUser = {
     email?: string;
     imageProfile?: string;
     password?: string;
-    purchasedProducts?: Array<Types.ObjectId>;
-    Favorites?: Array<Types.ObjectId>;
+    purchasedProducts?: [
+        {
+            productID: Types.ObjectId;
+            amount: number;
+        }
+    ];
+    favorites?: Array<Types.ObjectId>;
     cart?: [
         {
             productID: Types.ObjectId;
@@ -44,11 +54,27 @@ export const userSchema = new Schema<UserI>({
         type: String,
         required: true,
     },
-    purchasedProducts: Array<Types.ObjectId>,
-    Favorites: Array<Types.ObjectId>,
+    purchasedProducts: [
+        {
+            product: {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+            },
+            amount: Number,
+        },
+    ],
+    favorites: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+        },
+    ],
     cart: [
         {
-            productID: Types.ObjectId,
+            product: {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+            },
             amount: Number,
         },
     ],

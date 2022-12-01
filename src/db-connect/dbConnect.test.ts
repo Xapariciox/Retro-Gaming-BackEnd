@@ -1,4 +1,4 @@
-import { dbConnect } from './db.connect';
+import { dbConnect } from './db.connect.js';
 import mongoose from 'mongoose';
 
 const spiConnect = jest.spyOn(mongoose, 'connect');

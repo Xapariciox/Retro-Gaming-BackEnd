@@ -1,8 +1,9 @@
+import mongoose from 'mongoose';
 import createDebug from 'debug';
-import { User, UserI } from '../entities/user';
-import { passwdEncrypt } from '../services/auth';
-import { BasicRepo, id } from './repository-Interface';
-const debug = createDebug('projectBack:repository:user');
+import { User, UserI } from '../entities/user.js';
+import { passwordEncrypt } from '../services/auth.js';
+import { BasicRepo, id } from './repository-Interface.js';
+const debug = createDebug('Retro Back:repository:user');
 
 export class UserRepository implements BasicRepo<UserI> {
     static instance: UserRepository;
@@ -16,23 +17,17 @@ export class UserRepository implements BasicRepo<UserI> {
     private constructor() {
         debug('instance');
     }
-
-    async getAll(): Promise<Array<UserI>> {
-        debug('getAll');
-        const result = this.#Model.find();
-        return result;
-    }
-
     async get(id: id): Promise<UserI> {
         debug('get', id);
         const result = await this.#Model.findById(id);
         if (!result) throw new Error('Not found id');
         return result;
     }
-    async post(data: Partial<UserI>): Promise<UserI> {
+    async create(data: Partial<UserI>): Promise<UserI> {
         debug('post', data);
-        if (typeof data.password !== 'string') throw new Error('');
-        data.password = await passwdEncrypt(data.password);
+        if (typeof data.password !== 'string')
+            throw new mongoose.Error.ValidationError();
+        data.password = await passwordEncrypt(data.password);
         const result = await this.#Model.create(data);
         return result;
     }
@@ -50,10 +45,13 @@ export class UserRepository implements BasicRepo<UserI> {
         if (!result) throw new Error('Not found id');
         return result;
     }
-    async delete(id: id): Promise<id> {
+    delete(id: id): id {
         debug('delete', id);
-        const result = await this.#Model.findByIdAndDelete(id);
-        if (result === null) throw new Error('Not found id');
+        this.#Model.findByIdAndDelete(id);
+        //pendiente de revisar
+        // if (result === null) throw new Error('Not found id');
         return id;
+
+        //pendiente de revisar
     }
 }
