@@ -1,14 +1,12 @@
 import createDebug from 'debug';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { CustomError } from '../interfaces/error';
 const debug = createDebug('Retro Back:middlewares:interceptors');
 export const errorManager = (
     error: CustomError,
     _req: Request,
-    resp: Response,
-    _next: NextFunction
+    resp: Response
 ) => {
-    _next;
     debug(error.name, error.statusCode, error.statusMessage, error.message);
     let status = error.statusCode || 500;
     if (error.name === 'ValidationError') {

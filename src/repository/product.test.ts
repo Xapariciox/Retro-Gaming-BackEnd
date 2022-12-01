@@ -65,7 +65,6 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
             expect(async () => {
                 await repository.find({ name: 'Arroz' });
             }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
         });
     });
     afterAll(async () => {
