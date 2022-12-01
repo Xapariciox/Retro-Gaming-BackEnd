@@ -68,4 +68,7 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
             expect(spyModel).toHaveBeenCalled();
         });
     });
+    afterAll(async () => {
+        await mongoose.disconnect();
+    });
 });
