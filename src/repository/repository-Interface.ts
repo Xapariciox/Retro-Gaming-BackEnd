@@ -1,4 +1,6 @@
-export type id = number | string;
+import { Types } from 'mongoose';
+
+export type id = string | number;
 
 export interface BasicRepo<T> {
     get: (id: id) => Promise<T>;
