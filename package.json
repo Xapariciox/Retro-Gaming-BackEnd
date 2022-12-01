@@ -1,7 +1,7 @@
 {
-    "name": "week7.express",
+    "name": "Proyecto Final Roberto",
     "version": "1.0.0",
-    "description": "API server with express",
+    "description": "proyecto Final",
     "main": "index.js",
     "type": "module",
     "scripts": {
