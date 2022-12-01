@@ -1,18 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import createDebug from 'debug';
-import { ProductI } from '../entities/product';
-import { UserI } from '../entities/user';
-import { Repo } from '../repository/repository-Interface';
-import { HTTPError } from '../interfaces/error';
-import { createToken, passwordValidate } from '../services/auth';
+import { UserI } from '../entities/user.js';
+import { BasicRepo } from '../repository/repository-Interface.js';
+import { HTTPError } from '../interfaces/error.js';
+import { createToken, passwordValidate } from '../services/auth.js';
 
 const debug = createDebug('Proyecto Final:controller:user');
 
 export class UserController {
-    constructor(
-        public readonly UserRepository: Repo<UserI>,
-        public readonly ProductRepository: Repo<ProductI>
-    ) {
+    constructor(public readonly UserRepository: BasicRepo<UserI>) {
+        //falta repository product
         debug('instance');
     }
     async register(req: Request, resp: Response, next: NextFunction) {
@@ -33,7 +30,7 @@ export class UserController {
         try {
             debug('login', req.body.email);
             const user = await this.UserRepository.find({
-                name: req.body.email,
+                email: req.body.email,
             });
             const isPasswordValid = await passwordValidate(
                 req.body.password,
@@ -42,6 +39,7 @@ export class UserController {
             if (!isPasswordValid) throw new Error();
             const token = createToken({
                 id: user.id.toString(),
+                name: user.name,
                 email: user.email,
                 password: user.password,
             });

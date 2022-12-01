@@ -1,8 +1,8 @@
 import { Product, ProductI } from '../entities/product';
-import { id, BasicRepo } from './repository-Interface';
+import { id, BasicRepo2 } from './repository-Interface';
 import createDebug from 'debug';
-const debug = createDebug('projectBack:repository:Product');
-export class ProductRepository implements BasicRepo<ProductI> {
+const debug = createDebug('Retro Back:repository:Product');
+export class ProductRepository implements BasicRepo2<ProductI> {
     static instance: ProductRepository;
     public static getInstance(): ProductRepository {
         if (!ProductRepository.instance) {

@@ -3,7 +3,7 @@ import createDebug from 'debug';
 import { User, UserI } from '../entities/user.js';
 import { passwordEncrypt } from '../services/auth.js';
 import { BasicRepo, id } from './repository-Interface.js';
-const debug = createDebug('projectBack:repository:user');
+const debug = createDebug('Retro Back:repository:user');
 
 export class UserRepository implements BasicRepo<UserI> {
     static instance: UserRepository;

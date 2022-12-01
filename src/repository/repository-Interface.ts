@@ -6,6 +6,12 @@ export interface BasicRepo<T> {
     find: (data: Partial<T>) => Promise<T>;
 }
 
+export interface BasicRepo2<T> {
+    getAll: (id: id) => Promise<Array<T>>;
+    get: (id: id) => Promise<T>;
+    find: (data: Partial<T>) => Promise<T>;
+}
+
 export interface ExtraRepo<T> {
     getAll: () => Promise<Array<T>>;
     patch: (id: id, data: Partial<T>) => Promise<T>;

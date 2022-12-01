@@ -1,14 +1,15 @@
 import {
     createToken,
     getSecret,
-    passwdEncrypt,
+    passwordEncrypt,
     readToken,
-    passwdValidate,
+    passwordValidate,
 } from './auth';
 import jwt from 'jsonwebtoken';
 import bc from 'bcryptjs';
 import { SECRET } from '../config.js';
 const mock = {
+    id: 'ss',
     name: 'Pepe',
     password: '12345',
     email: 'pepe@gmail.com',
@@ -73,27 +74,27 @@ describe('Given "PasswordEncrypt" & passwordValidate', () => {
     const spyBcCompare = jest.spyOn(bc, 'compare');
     describe('when we call passwordEncrypt', () => {
         test('Bcrypt.hash should be call', async () => {
-            await passwdEncrypt('12345');
+            await passwordEncrypt('12345');
             expect(spyBcHash).toHaveBeenCalled();
         });
     });
-    describe(`Whe we call passwdValidate also
+    describe(`Whe we call passwordValidate also
                 and The passwd and its encryption are compared`, () => {
         let hash: string;
         const passwd = '12345';
         const badPasswd = '00000';
 
         beforeEach(async () => {
-            hash = await passwdEncrypt(passwd);
+            hash = await passwordEncrypt(passwd);
         });
 
         test('Then a valid password should be detected', async () => {
-            const result = await passwdValidate(passwd, hash);
+            const result = await passwordValidate(passwd, hash);
             expect(spyBcCompare).toHaveBeenCalled();
             expect(result).toBe(true);
         });
         test('Then a valid password should be detected', async () => {
-            const result = await passwdValidate(badPasswd, hash);
+            const result = await passwordValidate(badPasswd, hash);
             expect(spyBcCompare).toHaveBeenCalled();
             expect(result).toBe(false);
         });

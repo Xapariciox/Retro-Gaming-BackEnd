@@ -11,6 +11,7 @@ export const getSecret = (secret = SECRET) => {
 
 export type TokenPayload = {
     id: string;
+    name: string;
     password: string;
     email: string;
 };
