@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import createDebug from 'debug';
 import { User, UserI } from '../entities/user.js';
-import { passwdEncrypt } from '../services/auth.js';
+import { passwordEncrypt } from '../services/auth.js';
 import { BasicRepo, id } from './repository-Interface.js';
 const debug = createDebug('projectBack:repository:user');
 
@@ -27,7 +27,7 @@ export class UserRepository implements BasicRepo<UserI> {
         debug('post', data);
         if (typeof data.password !== 'string')
             throw new mongoose.Error.ValidationError();
-        data.password = await passwdEncrypt(data.password);
+        data.password = await passwordEncrypt(data.password);
         const result = await this.#Model.create(data);
         return result;
     }

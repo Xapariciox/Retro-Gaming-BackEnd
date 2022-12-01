@@ -56,14 +56,25 @@ export const userSchema = new Schema<UserI>({
     },
     purchasedProducts: [
         {
-            productID: Types.ObjectId,
+            product: {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+            },
             amount: Number,
         },
     ],
-    favorites: Array<Types.ObjectId>,
+    favorites: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Product',
+        },
+    ],
     cart: [
         {
-            productID: Types.ObjectId,
+            product: {
+                type: Schema.Types.ObjectId,
+                ref: 'Product',
+            },
             amount: Number,
         },
     ],

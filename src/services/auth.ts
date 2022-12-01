@@ -10,7 +10,7 @@ export const getSecret = (secret = SECRET) => {
 };
 
 export type TokenPayload = {
-    name: string;
+    id: string;
     password: string;
     email: string;
 };
@@ -24,10 +24,10 @@ export const readToken = (token: string) => {
     return payload as jwt.JwtPayload;
 };
 
-export const passwdEncrypt = (passwd: string) => {
+export const passwordEncrypt = (passwd: string) => {
     return bc.hash(passwd, 10);
 };
 
-export const passwdValidate = (newPasswd: string, hash: string) => {
+export const passwordValidate = (newPasswd: string, hash: string) => {
     return bc.compare(newPasswd, hash);
 };
