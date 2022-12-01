@@ -19,8 +19,11 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
     const invalidId = '537b422da27b69c98b1916e1aa';
     let testIds: Array<string>;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         testIds = await setUpCollection();
+    });
+    afterEach(async () => {
+        await mongoose.disconnect();
     });
     describe('when it has been run get and it has called Model.findById', () => {
         const spyModel = jest.spyOn(User, 'findById');
@@ -104,8 +107,5 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
             expect(spyModel).toHaveBeenCalled();
             expect(result).toEqual(testIds[0]);
         });
-    });
-    afterAll(async () => {
-        await mongoose.disconnect();
     });
 });
