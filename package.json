@@ -9,7 +9,7 @@
         "start:dev": "cross-env DEBUG=projectBack* PORT=7700 nodemon dist/index.js ",
         "build": "tsc",
         "build:dev": "tsc --watch",
-        "test": "cross-env NODE_ENV=test jest --watchAll --coverage ",
+        "test": "cross-env NODE_ENV=test jest --watchAll --coverage",
         "test:prod": "cross-env NODE_ENV=test jest --coverage",
         "dev": "run-p build:dev start:dev"
     },
