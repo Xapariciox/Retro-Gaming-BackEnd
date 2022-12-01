@@ -22,7 +22,7 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
     beforeEach(async () => {
         testIds = await setUpCollection();
     });
-    afterEach(async () => {
+    afterAll(async () => {
         await mongoose.disconnect();
     });
     describe('when it has been run get and it has called Model.findById', () => {

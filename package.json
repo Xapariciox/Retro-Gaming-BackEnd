@@ -1,5 +1,5 @@
 {
-    "name": "Proyecto Final Roberto",
+    "name": "back",
     "version": "1.0.0",
     "description": "proyecto Final",
     "main": "index.js",
@@ -10,7 +10,7 @@
         "build": "tsc",
         "build:dev": "tsc --watch",
         "test": "cross-env NODE_ENV=test jest --watchAll --coverage",
-        "test:prod": "cross-env NODE_ENV=test jest --coverage",
+        "test:prod": "cross-env NODE_ENV=test jest --coverage --passWithNoTests",
         "dev": "run-p build:dev start:dev"
     },
     "keywords": [],
