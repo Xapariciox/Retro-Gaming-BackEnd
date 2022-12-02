@@ -1,14 +1,19 @@
 import { NextFunction, Request, Response } from 'express';
 import createDebug from 'debug';
 import { UserI } from '../entities/user.js';
-import { BasicRepo } from '../repository/repository-Interface.js';
+import { BasicRepo, BasicRepo2 } from '../repository/repository-Interface.js';
 import { HTTPError } from '../interfaces/error.js';
 import { createToken, passwordValidate } from '../services/auth.js';
+import { ProductI } from '../entities/product.js';
+import { nextTick } from 'process';
 
 const debug = createDebug('retro-back:controller:user');
 
 export class UserController {
-    constructor(public readonly UserRepository: BasicRepo<UserI>) {
+    constructor(
+        public readonly UserRepository: BasicRepo<UserI>,
+        public readonly ProductRepository: BasicRepo2<ProductI>
+    ) {
         //falta repository product
         debug('instance');
     }
@@ -52,7 +57,6 @@ export class UserController {
         try {
             debug('delete', req.params.id);
             const pepito = await this.UserRepository.delete(req.params.id);
-            console.log(pepito);
 
             resp.json({ id: pepito });
         } catch (error) {
@@ -63,7 +67,7 @@ export class UserController {
         try {
             debug('get');
             const user = await this.UserRepository.get(req.params.id);
-            console.log(user);
+
             resp.json({ user });
         } catch (error) {
             next(this.#createHttpError(error as Error));
@@ -77,6 +81,40 @@ export class UserController {
                 req.body
             );
             resp.json({ updatedUser });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async addFavorites(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('addFavorites');
+            const user = await this.UserRepository.get(req.params.id);
+            if (
+                user.favorites.find((item) => item.toString() === req.body.id)
+            ) {
+                throw Error('duplicate favorites');
+            }
+
+            user.favorites.push(req.body.id);
+
+            const userUpdate = await this.UserRepository.patch(
+                req.params.id,
+                user
+            );
+
+            resp.status(202);
+            resp.json({ userUpdate });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async deleteFavorites(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('deleteFavorites');
+            const user = await this.UserRepository.get(req.params.id);
+
+            resp.status(202);
+            resp.json({});
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }

@@ -1,5 +1,5 @@
-import { Product, ProductI } from '../entities/product';
-import { id, BasicRepo2 } from './repository-Interface';
+import { Product, ProductI, ProtoProduct } from '../entities/product.js';
+import { id, BasicRepo2 } from './repository-Interface.js';
 import createDebug from 'debug';
 const debug = createDebug('Retro Back:repository:Product');
 export class ProductRepository implements BasicRepo2<ProductI> {
@@ -26,10 +26,16 @@ export class ProductRepository implements BasicRepo2<ProductI> {
         return result;
     }
 
-    async find(search: Partial<ProductI>): Promise<ProductI> {
-        debug('find', { search });
-        const result = await this.#Model.findOne(search);
+    async find(key: string, value: string): Promise<ProductI> {
+        debug('find categoria', { key });
+        const result = await this.#Model.find([key], value);
         if (!result) throw new Error('Not found id');
+        return result as unknown as ProductI;
+    }
+    async post(data: ProtoProduct): Promise<ProductI> {
+        debug('post', data);
+        const result = await await this.#Model.create(data);
+        console.log(result);
         return result;
     }
 }
