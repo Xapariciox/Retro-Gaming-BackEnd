@@ -5,7 +5,7 @@ import { BasicRepo } from '../repository/repository-Interface.js';
 import { HTTPError } from '../interfaces/error.js';
 import { createToken, passwordValidate } from '../services/auth.js';
 
-const debug = createDebug('Proyecto Final:controller:user');
+const debug = createDebug('retro-back:controller:user');
 
 export class UserController {
     constructor(public readonly UserRepository: BasicRepo<UserI>) {
@@ -48,6 +48,40 @@ export class UserController {
             next(this.#createHttpError);
         }
     }
+    async deleteAccount(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('delete', req.params.id);
+            const pepito = await this.UserRepository.delete(req.params.id);
+            console.log(pepito);
+
+            resp.json({ id: pepito });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async get(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('get');
+            const user = await this.UserRepository.get(req.params.id);
+            console.log(user);
+            resp.json({ user });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async patch(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('patch');
+            const updatedUser = await this.UserRepository.patch(
+                req.params.id,
+                req.body
+            );
+            resp.json({ updatedUser });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+
     #createHttpError(error: Error) {
         if (error.message === 'Not found id') {
             const httpError = new HTTPError(404, 'Not Found', error.message);

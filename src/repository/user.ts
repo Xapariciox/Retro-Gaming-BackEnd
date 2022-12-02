@@ -3,7 +3,7 @@ import createDebug from 'debug';
 import { User, UserI } from '../entities/user.js';
 import { passwordEncrypt } from '../services/auth.js';
 import { BasicRepo, id } from './repository-Interface.js';
-const debug = createDebug('Retro Back:repository:user');
+const debug = createDebug('retro-back:repository:user');
 
 export class UserRepository implements BasicRepo<UserI> {
     static instance: UserRepository;
@@ -20,11 +20,12 @@ export class UserRepository implements BasicRepo<UserI> {
     async get(id: id): Promise<UserI> {
         debug('get', id);
         const result = await this.#Model.findById(id);
+        console.log(result);
         if (!result) throw new Error('Not found id');
         return result;
     }
     async create(data: Partial<UserI>): Promise<UserI> {
-        debug('post', data);
+        debug('post', data.email);
         if (typeof data.password !== 'string')
             throw new mongoose.Error.ValidationError();
         data.password = await passwordEncrypt(data.password);
@@ -32,7 +33,7 @@ export class UserRepository implements BasicRepo<UserI> {
         return result;
     }
     async find(search: Partial<UserI>): Promise<UserI> {
-        debug('find', { search });
+        debug('find', search);
         const result = await this.#Model.findOne(search);
         if (!result) throw new Error('Not found id');
         return result;
@@ -45,13 +46,10 @@ export class UserRepository implements BasicRepo<UserI> {
         if (!result) throw new Error('Not found id');
         return result;
     }
-    delete(id: id): id {
+    async delete(id: id): Promise<id> {
         debug('delete', id);
-        this.#Model.findByIdAndDelete(id);
-        //pendiente de revisar
-        // if (result === null) throw new Error('Not found id');
+        const result = await this.#Model.findByIdAndDelete(id);
+        if (!result) throw new Error('Not found id');
         return id;
-
-        //pendiente de revisar
     }
 }

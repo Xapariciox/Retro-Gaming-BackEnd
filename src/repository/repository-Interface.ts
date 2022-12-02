@@ -4,6 +4,8 @@ export interface BasicRepo<T> {
     get: (id: id) => Promise<T>;
     create: (data: Partial<T>) => Promise<T>;
     find: (data: Partial<T>) => Promise<T>;
+    delete: (id: id) => Promise<id>;
+    patch: (id: id, data: Partial<T>) => Promise<T>;
 }
 
 export interface BasicRepo2<T> {
