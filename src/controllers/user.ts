@@ -5,7 +5,6 @@ import { BasicRepo, BasicRepo2 } from '../repository/repository-Interface.js';
 import { HTTPError } from '../interfaces/error.js';
 import { createToken, passwordValidate } from '../services/auth.js';
 import { ProductI } from '../entities/product.js';
-import { nextTick } from 'process';
 
 const debug = createDebug('retro-back:controller:user');
 
@@ -56,9 +55,11 @@ export class UserController {
     async deleteAccount(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('delete', req.params.id);
-            const pepito = await this.UserRepository.delete(req.params.id);
+            const deleteAccount = await this.UserRepository.delete(
+                req.params.id
+            );
 
-            resp.json({ id: pepito });
+            resp.json({ id: deleteAccount });
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }
@@ -89,19 +90,16 @@ export class UserController {
         try {
             debug('addFavorites');
             const user = await this.UserRepository.get(req.params.id);
-            if (
-                user.favorites.find((item) => item.toString() === req.body.id)
-            ) {
-                throw Error('duplicate favorites');
-            }
-
+            // if (
+            //     user.favorites.find((item) => item.toString() !== req.body.id)
+            // ) {
+            //     throw Error('duplicate favorites');
+            // }
             user.favorites.push(req.body.id);
-
             const userUpdate = await this.UserRepository.patch(
                 req.params.id,
                 user
             );
-
             resp.status(202);
             resp.json({ userUpdate });
         } catch (error) {
@@ -112,9 +110,17 @@ export class UserController {
         try {
             debug('deleteFavorites');
             const user = await this.UserRepository.get(req.params.id);
-
+            if (
+                !user.favorites.find((item) => item.toString() === req.body.id)
+            ) {
+                throw Error('Not Found id');
+            }
+            user.favorites = user.favorites.filter(
+                (item) => item.toString() !== req.body.id
+            );
+            await this.UserRepository.patch(req.params.id, user);
             resp.status(202);
-            resp.json({});
+            resp.json(user.favorites);
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }
