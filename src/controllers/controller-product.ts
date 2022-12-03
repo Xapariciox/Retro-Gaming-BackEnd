@@ -58,7 +58,7 @@ export class ProductController {
             resp.status(200).json({ getProduct });
         } catch (error) {
             const httpError = new HTTPError(
-                503,
+                404,
                 'Service unavailable',
                 (error as Error).message
             );
