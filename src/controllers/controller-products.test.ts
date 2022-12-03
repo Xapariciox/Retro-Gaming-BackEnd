@@ -48,4 +48,25 @@ describe('Given the Product Controller', () => {
             expect(resp.json).toHaveBeenCalledWith(mockProduct);
         });
     });
+    describe('when we run get', () => {
+        test('it should an Product by id', async () => {
+            req.params = { id: '2' };
+            await productController.get(req as Request, resp as Response, next);
+            expect(resp.json).toHaveBeenCalledWith(mockProduct);
+        });
+    });
+    describe('when we run post', () => {
+        test('it should an Product by id', async () => {
+            req.params = { id: '2' };
+            await productController.get(req as Request, resp as Response, next);
+            expect(resp.json).toHaveBeenCalledWith(mockProduct);
+        });
+    });
+    describe('when we run get', () => {
+        test('it should an Product by id', async () => {
+            req.params = { id: '2' };
+            await productController.get(req as Request, resp as Response, next);
+            expect(resp.json).toHaveBeenCalledWith(mockProduct);
+        });
+    });
 });
