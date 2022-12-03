@@ -3,7 +3,7 @@ import createDebug from 'debug';
 import { app } from './app.js';
 import { dbConnect } from './db-connect/db.connect.js';
 import { CustomError } from './interfaces/error.js';
-const debug = createDebug('Retro Back');
+const debug = createDebug('retro-back');
 
 const port = process.env.PORT || 4000;
 const server = http.createServer(app);

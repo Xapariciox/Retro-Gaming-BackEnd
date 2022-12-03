@@ -56,14 +56,14 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
     describe('When it has been run find and it has called Model.findOne', () => {
         const spyModel = jest.spyOn(Product, 'findOne');
         test('Then, if the data has been valid, it should be returned the found Product ', async () => {
-            const result = await repository.find(mockData[0]);
+            const result = await repository.find('name', 'Carlos');
             expect(spyModel).toHaveBeenCalled();
             expect(result.name).toEqual(mockData[0].name);
         });
 
         test('Then, if the data has been invalid, it should be throw an error', async () => {
             expect(async () => {
-                await repository.find({ name: 'Arroz' });
+                await repository.find('name', 'Arroz');
             }).rejects.toThrowError(mongoose.MongooseError);
         });
     });

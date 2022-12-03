@@ -3,6 +3,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { setCors } from './middlewares/cors.js';
 import { errorManager } from './middlewares/error.js';
+import { productRouter } from './router/product.js';
 import { usersRouter } from './router/users.js';
 
 export const app = express();
@@ -27,5 +28,6 @@ app.get('/', (_req, res) => {
     res.send('Proyecto final En progreso... Sigan observando :D').end();
 });
 app.use('/users', usersRouter);
+app.use('/products', productRouter);
 
 app.use(errorManager);

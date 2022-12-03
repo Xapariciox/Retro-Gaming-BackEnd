@@ -3,7 +3,7 @@ export type ProductI = {
     id: Types.ObjectId;
     name: string;
     image: string;
-    date: Date;
+    date: number;
     description: string;
     stock: number;
     brand: string;
@@ -13,7 +13,7 @@ export type ProductI = {
 export type ProtoProduct = {
     name?: string;
     image?: string;
-    date?: Date;
+    date?: number;
     description?: string;
     stock?: number;
     brand?: string;
@@ -30,11 +30,11 @@ export const productSchema = new Schema<ProductI>({
         type: String,
         required: true,
     },
-    date: Date,
+    date: Number,
     description: String,
     stock: Number,
     brand: String,
-    price: String,
+    price: Number,
     category: String,
 });
 

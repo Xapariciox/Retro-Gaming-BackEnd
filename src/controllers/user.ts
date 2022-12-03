@@ -1,14 +1,18 @@
 import { NextFunction, Request, Response } from 'express';
 import createDebug from 'debug';
 import { UserI } from '../entities/user.js';
-import { BasicRepo } from '../repository/repository-Interface.js';
+import { BasicRepo, BasicRepo2 } from '../repository/repository-Interface.js';
 import { HTTPError } from '../interfaces/error.js';
 import { createToken, passwordValidate } from '../services/auth.js';
+import { ProductI } from '../entities/product.js';
 
-const debug = createDebug('Proyecto Final:controller:user');
+const debug = createDebug('retro-back:controller:user');
 
 export class UserController {
-    constructor(public readonly UserRepository: BasicRepo<UserI>) {
+    constructor(
+        public readonly UserRepository: BasicRepo<UserI>,
+        public readonly ProductRepository: BasicRepo2<ProductI>
+    ) {
         //falta repository product
         debug('instance');
     }
@@ -48,6 +52,80 @@ export class UserController {
             next(this.#createHttpError);
         }
     }
+    async deleteAccount(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('delete', req.params.id);
+            const deleteAccount = await this.UserRepository.delete(
+                req.params.id
+            );
+
+            resp.json({ id: deleteAccount });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async get(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('get');
+            const user = await this.UserRepository.get(req.params.id);
+
+            resp.json({ user });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async patch(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('patch');
+            const updatedUser = await this.UserRepository.patch(
+                req.params.id,
+                req.body
+            );
+            resp.json({ updatedUser });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async addFavorites(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('addFavorites');
+            const user = await this.UserRepository.get(req.params.id);
+            if (
+                user.favorites.find((item) => item.toString() === req.body.id)
+            ) {
+                throw Error('duplicate favorites');
+            }
+            user.favorites.push(req.body.id);
+            const userUpdate = await this.UserRepository.patch(
+                req.params.id,
+                user
+            );
+            resp.status(202);
+            resp.json({ userUpdate });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async deleteFavorites(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('deleteFavorites');
+            const user = await this.UserRepository.get(req.params.id);
+            if (
+                !user.favorites.find((item) => item.toString() === req.body.id)
+            ) {
+                throw Error('Not Found id');
+            }
+            user.favorites = user.favorites.filter(
+                (item) => item.toString() !== req.body.id
+            );
+            await this.UserRepository.patch(req.params.id, user);
+            resp.status(202);
+            resp.json(user.favorites);
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+
     #createHttpError(error: Error) {
         if (error.message === 'Not found id') {
             const httpError = new HTTPError(404, 'Not Found', error.message);

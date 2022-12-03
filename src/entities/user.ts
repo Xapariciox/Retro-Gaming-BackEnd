@@ -1,21 +1,21 @@
 import { model, Schema, Types } from 'mongoose';
 
 export type UserI = {
-    id: Types.ObjectId;
+    id: string;
     name: string;
     email: string;
     imageProfile: string;
     password: string;
     purchasedProducts: [
         {
-            productID: Types.ObjectId;
+            productID: string;
             amount: number;
         }
     ];
-    favorites: Array<Types.ObjectId>;
+    favorites: Array<string>;
     cart: [
         {
-            productID: Types.ObjectId;
+            productID: string;
             amount: number;
         }
     ];
@@ -27,14 +27,14 @@ export type ProtoUser = {
     password?: string;
     purchasedProducts?: [
         {
-            productID: Types.ObjectId;
+            productID: string;
             amount: number;
         }
     ];
-    favorites?: Array<Types.ObjectId>;
+    favorites?: Array<string>;
     cart?: [
         {
-            productID: Types.ObjectId;
+            productID: string;
             amount: number;
         }
     ];
@@ -85,6 +85,7 @@ userSchema.set('toJSON', {
         returnedObject.id = returnedObject._id;
         delete returnedObject.__v;
         delete returnedObject._id;
+        delete returnedObject.password;
     },
 });
 
