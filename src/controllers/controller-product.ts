@@ -49,21 +49,7 @@ export class ProductController {
             next(httpError);
         }
     }
-    async post(req: ExtraRequest, resp: Response, next: NextFunction) {
-        try {
-            debug('post', req.body);
 
-            const product = await this.ProductRepository.post(req.body);
-            resp.status(201).json({ product });
-        } catch (error) {
-            const httpError = new HTTPError(
-                503,
-                'Service unavailable',
-                (error as Error).message
-            );
-            next(httpError);
-        }
-    }
     async get(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('get', req.params.id);

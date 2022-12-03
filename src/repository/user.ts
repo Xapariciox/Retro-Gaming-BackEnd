@@ -39,11 +39,10 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     async patch(id: id, data: Partial<UserI>): Promise<UserI> {
         debug('patch', id);
-        const result = await this.#Model
-            .findByIdAndUpdate(id, data, {
-                new: true,
-            })
-            .populate('favorites');
+        const result = await this.#Model.findByIdAndUpdate(id, data, {
+            new: true,
+        });
+        // .populate('favorites');
         if (!result) throw new Error('Not found id');
 
         return result;

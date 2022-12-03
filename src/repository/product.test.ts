@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import { dbConnect } from '../db-connect/db.connect';
-import { Product } from '../entities/product';
-import { ProductRepository } from './product';
+import { dbConnect } from '../db-connect/db.connect.js';
+import { Product } from '../entities/product.js';
+import { ProductRepository } from './product.js';
 
 describe('Given a singleton instance of the class "ProductRepository"', () => {
     const mockData = [
@@ -58,7 +58,7 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
         test('Then, if the data has been valid, it should be returned the found Product ', async () => {
             const result = await repository.find('name', 'Carlos');
             expect(spyModel).toHaveBeenCalled();
-            expect(result.name).toEqual(mockData[0].name);
+            expect(result.map((item) => item.name)).toEqual([mockData[0].name]);
         });
 
         test('Then, if the data has been invalid, it should be throw an error', async () => {
