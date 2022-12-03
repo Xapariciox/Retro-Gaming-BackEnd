@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ProductController } from '../controllers/product.js';
+import { ProductController } from '../controllers/controller-product.js';
 import { ProductRepository } from '../repository/product.js';
 import { UserRepository } from '../repository/user.js';
 
