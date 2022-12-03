@@ -90,11 +90,11 @@ export class UserController {
         try {
             debug('addFavorites');
             const user = await this.UserRepository.get(req.params.id);
-            // if (
-            //     user.favorites.find((item) => item.toString() !== req.body.id)
-            // ) {
-            //     throw Error('duplicate favorites');
-            // }
+            if (
+                user.favorites.find((item) => item.toString() === req.body.id)
+            ) {
+                throw Error('duplicate favorites');
+            }
             user.favorites.push(req.body.id);
             const userUpdate = await this.UserRepository.patch(
                 req.params.id,
