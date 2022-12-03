@@ -1,6 +1,6 @@
 import createDebug from 'debug';
 import { Request, Response, NextFunction } from 'express';
-import { CustomError } from '../interfaces/error';
+import { CustomError } from '../interfaces/error.js';
 const debug = createDebug('Retro Back:middlewares:interceptors');
 export const errorManager = (
     error: CustomError,

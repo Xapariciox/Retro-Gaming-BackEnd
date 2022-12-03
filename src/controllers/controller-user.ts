@@ -120,7 +120,7 @@ export class UserController {
             );
             await this.UserRepository.patch(req.params.id, user);
             resp.status(202);
-            resp.json(user.favorites);
+            resp.json({ user });
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }

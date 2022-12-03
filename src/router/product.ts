@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { ProductController } from '../controllers/product.js';
+import { ProductController } from '../controllers/controller-product.js';
 import { ProductRepository } from '../repository/product.js';
 import { UserRepository } from '../repository/user.js';
 
@@ -11,4 +11,5 @@ const controller = new ProductController(
 );
 
 productRouter.get('/', controller.getAll.bind(controller));
-productRouter.post('/add', controller.post.bind(controller));
+productRouter.get('/:key/:value', controller.find.bind(controller));
+productRouter.get('/:id', controller.get.bind(controller));

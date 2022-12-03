@@ -11,7 +11,7 @@ export interface BasicRepo<T> {
 export interface BasicRepo2<T> {
     getAll: () => Promise<Array<T>>;
     get: (id: id) => Promise<T>;
-    find: (key: string, value: string) => Promise<T>;
+    find: (key: string, value: string) => Promise<Array<T>>;
     post: (data: Partial<T>) => Promise<T>;
 }
 

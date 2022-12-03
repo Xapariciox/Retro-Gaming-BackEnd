@@ -32,29 +32,33 @@ export class ProductController {
     async find(req: Request, res: Response, next: NextFunction) {
         try {
             debug('find');
-            const places = await this.ProductRepository.find(
+            const products = await this.ProductRepository.find(
                 req.params.key,
                 req.params.value
             );
-            res.json({ places });
+            if (products.length < 1) {
+                throw new Error('Not Found');
+            }
+            res.json({ products });
         } catch (error) {
             const httpError = new HTTPError(
-                503,
+                404,
                 'Service unavailable',
                 (error as Error).message
             );
             next(httpError);
         }
     }
-    async post(req: ExtraRequest, resp: Response, next: NextFunction) {
-        try {
-            debug('post', req.body);
 
-            const product = await this.ProductRepository.post(req.body);
-            resp.status(201).json({ product });
+    async get(req: ExtraRequest, resp: Response, next: NextFunction) {
+        try {
+            debug('get', req.params.id);
+
+            const getProduct = await this.ProductRepository.get(req.params.id);
+            resp.status(200).json({ getProduct });
         } catch (error) {
             const httpError = new HTTPError(
-                503,
+                404,
                 'Service unavailable',
                 (error as Error).message
             );
