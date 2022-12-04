@@ -25,8 +25,6 @@ describe('Given UserController', () => {
         repository.find = jest.fn().mockResolvedValue({
             id: userId,
             name: 'elena',
-
-            myProducts: [productId],
         });
 
         repository.patch = jest.fn().mockResolvedValue({
@@ -67,27 +65,33 @@ describe('Given UserController', () => {
                 },
             });
         });
-        // test('Then deleted account should have been called', async () => {
-        //     await userController.deleteAccount(
-        //         req as Request,
-        //         resp as Response,
-        //         next
-        //     );
-        //     req.params = { id: '2' };
-        //     expect(resp.json).toHaveBeenCalledWith({ id: '222' });
-        // });
-        // test('Then addCart should have been called', async () => {
-        //     productRepo.get = jest.fn().mockResolvedValueOnce({
-        //         id: productId,
-        //         name: 'aldana',
-        //     });
-        //     await userController.addCart(
-        //         req as ExtraRequest,
-        //         resp as Response,
-        //         next
-        //     );
-        //     expect(resp.json).toHaveBeenCalled();
-        // });
+        test('Then addFav should have been called', async () => {
+            const mockData = [
+                {
+                    name: 'Pepe',
+                    email: 'pepe@gmail.com',
+                    id: '123456789009876543211234',
+                    password: '1234',
+                    cart: [{ id: '638c981be950874190b97fb7' }],
+                },
+            ];
+            repository.patch = jest.fn().mockResolvedValue(mockData);
+
+            (req as Request).body = { id: '123456789009876543211234' };
+            req.params = { id: '638c981be950874190b97fb8' };
+
+            productRepo.get = jest
+                .fn()
+                .mockResolvedValue('638c981be950874190b97fb8');
+            repository.get = jest.fn().mockResolvedValue(mockData[0]);
+
+            await userController.addCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalled();
+        });
 
         test('Then login should have been called', async () => {
             (passwordValidate as jest.Mock).mockResolvedValue(true);
