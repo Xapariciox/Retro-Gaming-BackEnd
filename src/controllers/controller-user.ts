@@ -128,6 +128,7 @@ export class UserController {
     async addCart(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('addCart');
+            console.log('esto es lo que busca');
             const user = await this.UserRepository.get(req.params.id);
             if (user.cart.find((item) => item.toString() === req.body.id)) {
                 throw Error('duplicate ');

@@ -25,8 +25,6 @@ describe('Given UserController', () => {
         repository.find = jest.fn().mockResolvedValue({
             id: userId,
             name: 'elena',
-
-            myProducts: [productId],
         });
 
         repository.patch = jest.fn().mockResolvedValue({
@@ -67,27 +65,18 @@ describe('Given UserController', () => {
                 },
             });
         });
-        // test('Then deleted account should have been called', async () => {
-        //     await userController.deleteAccount(
-        //         req as Request,
-        //         resp as Response,
-        //         next
-        //     );
-        //     req.params = { id: '2' };
-        //     expect(resp.json).toHaveBeenCalledWith({ id: '222' });
-        // });
-        // test('Then addCart should have been called', async () => {
-        //     productRepo.get = jest.fn().mockResolvedValueOnce({
-        //         id: productId,
-        //         name: 'aldana',
-        //     });
-        //     await userController.addCart(
-        //         req as ExtraRequest,
-        //         resp as Response,
-        //         next
-        //     );
-        //     expect(resp.json).toHaveBeenCalled();
-        // });
+        test('Then addCart should have been called', async () => {
+            productRepo.get = jest.fn().mockResolvedValueOnce({
+                id: productId,
+                name: 'aldana',
+            });
+            await userController.addCart(
+                req as Request,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalled();
+        });
 
         test('Then login should have been called', async () => {
             (passwordValidate as jest.Mock).mockResolvedValue(true);

@@ -71,18 +71,6 @@ describe('Given the Product Controller', () => {
             };
             const next: NextFunction = jest.fn();
 
-            test('should return an error', async () => {
-                error.message = 'Not found id';
-                error.statusCode = 404;
-                error.statusMessage = 'Not found';
-                expect(error).toBeInstanceOf(Error);
-                expect(error).toBeInstanceOf(HTTPError);
-                expect(error).toHaveProperty('statusCode', 404);
-                expect(error).toHaveProperty('statusMessage', 'Not found');
-                expect(error).toHaveProperty('message', 'Not found id');
-                expect(error).toHaveProperty('name', 'HTTPError');
-            });
-
             test('Then getAll() should return an error', async () => {
                 productRepo.getAll = jest.fn().mockRejectedValue('');
                 error = new HTTPError(
