@@ -13,7 +13,7 @@ describe('Given an "app" with "/Products" route', () => {
             await mongoose.disconnect();
         });
 
-        test('Then the get to url / should sent status 200', async () => {
+        test('Then the get to url/should sent status 200', async () => {
             const response = await request(app).get('/');
             expect(response.status).toBe(200);
         });
