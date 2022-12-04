@@ -13,7 +13,6 @@ export class UserController {
         public readonly UserRepository: BasicRepo<UserI>,
         public readonly ProductRepository: BasicRepo2<ProductI>
     ) {
-        //falta repository product
         debug('instance');
     }
     async register(req: Request, resp: Response, next: NextFunction) {
