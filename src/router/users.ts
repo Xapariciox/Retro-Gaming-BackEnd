@@ -27,3 +27,4 @@ usersRouter.patch(
     logged,
     controller.deleteFavorites.bind(controller)
 );
+usersRouter.patch('/addcart/:id', logged, controller.addCart.bind(controller));

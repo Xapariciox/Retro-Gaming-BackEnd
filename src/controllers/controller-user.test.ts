@@ -21,19 +21,21 @@ describe('Given UserController', () => {
         repository.create = jest.fn().mockResolvedValue({
             id: userId,
             name: 'pepe',
-            role: 'admin',
         });
         repository.find = jest.fn().mockResolvedValue({
             id: userId,
             name: 'elena',
-            role: 'admin',
+
             myProducts: [productId],
         });
 
         repository.patch = jest.fn().mockResolvedValue({
             id: userId,
             name: 'carlos',
-            role: 'admin',
+        });
+        repository.get = jest.fn().mockResolvedValue({
+            id: userId,
+            name: 'carlos',
         });
 
         const userController = new UserController(repository, productRepo);
@@ -62,7 +64,6 @@ describe('Given UserController', () => {
                 user: {
                     id: userId,
                     name: 'pepe',
-                    role: 'admin',
                 },
             });
         });
@@ -76,11 +77,11 @@ describe('Given UserController', () => {
         //     expect(resp.json).toHaveBeenCalledWith({ id: '222' });
         // });
         // test('Then addCart should have been called', async () => {
-        //     productRepo.find = jest.fn().mockResolvedValueOnce({
+        //     productRepo.get = jest.fn().mockResolvedValueOnce({
         //         id: productId,
-        //         name: 'Ror',
+        //         name: 'aldana',
         //     });
-        //     await userController.addFavorites(
+        //     await userController.addCart(
         //         req as ExtraRequest,
         //         resp as Response,
         //         next

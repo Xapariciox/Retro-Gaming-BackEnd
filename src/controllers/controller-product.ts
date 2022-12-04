@@ -26,7 +26,7 @@ export class ProductController {
             const Products = getProducts.map((data) => data);
             resp.json({ Products });
         } catch (error) {
-            next(this.#createHttpError(error as Error));
+            next(this.createHttpError(error as Error));
         }
     }
     async find(req: Request, res: Response, next: NextFunction) {
@@ -65,7 +65,7 @@ export class ProductController {
             next(httpError);
         }
     }
-    #createHttpError(error: Error) {
+    createHttpError(error: Error) {
         if ((error as Error).message === 'Not found id') {
             const httpError = new HTTPError(
                 404,
