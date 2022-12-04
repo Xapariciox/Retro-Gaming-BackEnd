@@ -16,7 +16,6 @@ describe('Given UserController', () => {
         const repository = UserRepository.getInstance();
         const productRepo = ProductRepository.getInstance();
         const userId = new Types.ObjectId();
-        const productId = new Types.ObjectId();
 
         repository.create = jest.fn().mockResolvedValue({
             id: userId,
