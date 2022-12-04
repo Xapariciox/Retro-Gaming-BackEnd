@@ -22,7 +22,7 @@ export class UserRepository implements BasicRepo<UserI> {
         const result = await this.#Model
             .findById(id)
             .populate('favorites')
-            .populate('cart');
+            .populate('cart.product');
         if (!result) throw new Error('Not found id');
         return result;
     }
