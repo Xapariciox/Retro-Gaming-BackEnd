@@ -19,7 +19,10 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     async get(id: id): Promise<UserI> {
         debug('get', id);
-        const result = await this.#Model.findById(id);
+        const result = await this.#Model
+            .findById(id)
+            .populate('favorites')
+            .populate('cart');
         if (!result) throw new Error('Not found id');
         return result;
     }
@@ -39,10 +42,11 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     async patch(id: id, data: Partial<UserI>): Promise<UserI> {
         debug('patch', id);
-        const result = await this.#Model.findByIdAndUpdate(id, data, {
-            new: true,
-        });
-        // .populate('favorites');
+        const result = await this.#Model
+            .findByIdAndUpdate(id, data, {
+                new: true,
+            })
+            .populate('favorites');
         if (!result) throw new Error('Not found id');
 
         return result;

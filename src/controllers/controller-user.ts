@@ -125,7 +125,28 @@ export class UserController {
             next(this.#createHttpError(error as Error));
         }
     }
+    async addCart(req: Request, resp: Response, next: NextFunction) {
+        try {
+            debug('addCart');
+            const user = await this.UserRepository.get(req.params.id);
+            if (user.cart.find((item) => item.toString() === req.body.id)) {
+                throw Error('duplicate ');
+            }
+            user.cart.push({
+                productID: req.body.id,
+                amount: req.body.amount,
+            });
+            const userUpdate = await this.UserRepository.patch(
+                req.params.id,
+                user
+            );
 
+            resp.status(202);
+            resp.json({ userUpdate });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
     #createHttpError(error: Error) {
         if (error.message === 'Not found id') {
             const httpError = new HTTPError(404, 'Not Found', error.message);

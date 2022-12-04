@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { dbConnect } from '../db-connect/db.connect.js';
 import { User } from '../entities/user.js';
+import { ProductRepository } from './product.js';
 import { UserRepository } from './user.js';
 
 describe('Given a singleton instance of the class "UserRepository"', () => {
@@ -16,6 +17,7 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         return [data[0].id, data[1].id];
     };
     const repository = UserRepository.getInstance();
+    ProductRepository.getInstance();
     const invalidId = '537b422da27b69c98b1916e1aa';
     let testIds: Array<string>;
 

@@ -116,4 +116,19 @@ describe('Given the Product Controller', () => {
             });
         });
     });
+    describe('When we instantiate find()', () => {
+        req.params = { key: 'name' };
+        req.params = { value: 'rodrigo' };
+        productRepo.find = jest.fn().mockResolvedValue({ name: 'rodrigo' });
+        test('It should return the place search by params', async () => {
+            await productController.find(
+                req as Request,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalledWith({
+                products: { name: 'rodrigo' },
+            });
+        });
+    });
 });
