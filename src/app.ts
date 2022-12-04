@@ -31,5 +31,3 @@ app.use('/users', usersRouter);
 app.use('/products', productRouter);
 
 app.use(errorManager);
-
-//  Product.deleteMany({ name: 'Ango' });
