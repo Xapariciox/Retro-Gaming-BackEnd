@@ -55,14 +55,12 @@ export class UserRepository implements BasicRepo<UserI> {
         //no se si lo necesitare front
         // .populate('favorites')
         // .populate('cart.product');
-        if (!result) throw new Error('Not found id');
 
-        return result;
+        return result as UserI;
     }
     async delete(id: id): Promise<id> {
         debug('delete', id);
-        const result = await this.#Model.findByIdAndDelete(id);
-        if (!result) throw new Error('Not found id');
+        await this.#Model.findByIdAndDelete(id);
         return id;
     }
 }

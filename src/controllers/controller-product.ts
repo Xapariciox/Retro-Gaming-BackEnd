@@ -55,7 +55,7 @@ export class ProductController {
             debug('get', req.params.id);
 
             const getProduct = await this.ProductRepository.get(req.params.id);
-            resp.status(200).json({ getProduct });
+            resp.json({ getProduct });
         } catch (error) {
             const httpError = new HTTPError(
                 404,
@@ -66,10 +66,6 @@ export class ProductController {
         }
     }
     createHttpError(error: Error) {
-        if (error.message === 'Not found id') {
-            const httpError = new HTTPError(404, 'Not Found', error.message);
-            return httpError;
-        }
         const httpError = new HTTPError(
             503,
             'Service unavailable',

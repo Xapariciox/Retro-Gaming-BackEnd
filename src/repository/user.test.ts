@@ -27,7 +27,7 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
     afterAll(async () => {
         await mongoose.disconnect();
     });
-    describe('when it has been run get and it has called Model.findById', () => {
+    describe('when it has been run getForMethods and it has called Model.findById', () => {
         const spyModel = jest.spyOn(User, 'findById');
         test('then, the id exist in the collecion returned the user ', async () => {
             const result = await repository.getForMethods(testIds[0]);
@@ -35,7 +35,7 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
             expect(result.name).toEqual(mockData[0].name);
         });
     });
-    describe('when it has been run get and it has called Model.findById', () => {
+    describe('when it has been run getForMethods and it has called Model.findById', () => {
         const spyModel = jest.spyOn(User, 'findById');
         test('then, the id does not exist in the collection returned one Error ', async () => {
             expect(spyModel).toHaveBeenCalled();

@@ -53,18 +53,24 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
             expect(spyModel).toHaveBeenCalled();
         });
     });
-    describe('When it has been run find and it has called Model.findOne', () => {
-        const spyModel = jest.spyOn(Product, 'findOne');
+    describe('When it has been run find and it has called Model.find', () => {
+        const spyModel = jest.spyOn(Product, 'find');
         test('Then, if the data has been valid, it should be returned the found Product ', async () => {
             const result = await repository.find('name', 'Carlos');
             expect(spyModel).toHaveBeenCalled();
             expect(result.map((item) => item.name)).toEqual([mockData[0].name]);
         });
-
-        test('Then, if the data has been invalid, it should be throw an error', async () => {
-            expect(async () => {
-                await repository.find('name', 'Arroz');
-            }).rejects.toThrowError(mongoose.MongooseError);
+    });
+    describe('When it has been run find and it has called Model.create', () => {
+        const spyModel = jest.spyOn(Product, 'create');
+        test('Then, if the data has been valid, it should be returned the found Product ', async () => {
+            const mockDataCreate = {
+                name: 'pepe',
+                image: 'sss',
+            };
+            const result = await repository.post(mockDataCreate);
+            expect(spyModel).toHaveBeenCalled();
+            expect(result.name).toEqual(mockDataCreate.name);
         });
     });
     afterAll(async () => {

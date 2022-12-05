@@ -3,19 +3,13 @@ import { UserRepository } from '../repository/user.js';
 import { ProductController } from './controller-product.js';
 import { NextFunction, Request, Response } from 'express';
 import { CustomError, HTTPError } from '../interfaces/error.js';
+import { ExtraRequest } from '../middlewares/interceptors.js';
 
 const mockProduct = { Products: [{ name: 'Consola', image: 'image.png' }] };
-
-const mockResolvedValue = { Product: ['pizza'] };
 
 describe('Given the Product Controller', () => {
     const productRepo = ProductRepository.getInstance();
     const userRepo = UserRepository.getInstance();
-
-    productRepo.getAll = jest
-        .fn()
-        .mockResolvedValue([{ name: 'Consola', image: 'image.png' }]);
-    productRepo.get = jest.fn().mockRejectedValue(mockResolvedValue);
     userRepo.getForMethods = jest.fn().mockResolvedValue({
         name: 'Ango',
         email: 'ango123@gmail.com',
@@ -24,6 +18,9 @@ describe('Given the Product Controller', () => {
     userRepo.patch = jest.fn().mockResolvedValue(mockProduct);
 
     const productController = new ProductController(productRepo, userRepo);
+    productRepo.getAll = jest
+        .fn()
+        .mockResolvedValue([{ name: 'Consola', image: 'image.png' }]);
 
     const req: Partial<Request> = {};
     const resp: Partial<Response> = {
@@ -33,6 +30,9 @@ describe('Given the Product Controller', () => {
     const next: NextFunction = jest.fn();
 
     describe('when we run getAll', () => {
+        productRepo.getAll = jest
+            .fn()
+            .mockResolvedValue([{ name: 'Consola', image: 'image.png' }]);
         test('It should return an array of all the Products', async () => {
             await productController.getAll(
                 req as Request,
@@ -54,11 +54,21 @@ describe('Given the Product Controller', () => {
     });
     describe('when we run get', () => {
         test('it should an Product by id', async () => {
+            productRepo.get = jest.fn().mockResolvedValue({
+                name: 'console',
+            });
             req.params = { id: '2' };
-            await productController.get(req as Request, resp as Response, next);
-            expect(resp.json).toHaveBeenCalledWith(mockProduct);
+            await productController.get(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalledWith({
+                getProduct: { name: 'console' },
+            });
         });
     });
+
     describe("Given the product's controller but,", () => {
         describe('When ProductController is not valid', () => {
             let error: CustomError;
