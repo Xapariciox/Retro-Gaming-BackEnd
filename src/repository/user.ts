@@ -24,6 +24,7 @@ export class UserRepository implements BasicRepo<UserI> {
             .populate('favorites')
             .populate('cart.product');
         if (!result) throw new Error('Not found id');
+
         return result;
     }
     async create(data: Partial<UserI>): Promise<UserI> {
@@ -42,11 +43,12 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     async patch(id: id, data: Partial<UserI>): Promise<UserI> {
         debug('patch', id);
-        const result = await this.#Model
-            .findByIdAndUpdate(id, data, {
-                new: true,
-            })
-            .populate('favorites');
+        const result = await this.#Model.findByIdAndUpdate(id, data, {
+            new: true,
+        });
+        //no se si lo necesitare front
+        // .populate('favorites')
+        // .populate('cart.product');
         if (!result) throw new Error('Not found id');
 
         return result;

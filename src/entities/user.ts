@@ -1,5 +1,10 @@
 import { model, Schema } from 'mongoose';
+import { ProductI } from './product';
 
+export type MyProducts = {
+    product: string | ProductI;
+    amount: number;
+};
 export type UserI = {
     id: string;
     name: string;
@@ -8,17 +13,12 @@ export type UserI = {
     password: string;
     purchasedProducts: [
         {
-            productID: string;
+            product: string;
             amount: number;
         }
     ];
     favorites: Array<string>;
-    cart: [
-        {
-            productID: string;
-            amount: number;
-        }
-    ];
+    cart: Array<MyProducts>;
 };
 export type ProtoUser = {
     name?: string;
@@ -27,17 +27,14 @@ export type ProtoUser = {
     password?: string;
     purchasedProducts?: [
         {
-            productID: string;
+            product: {
+                product: string;
+            };
             amount: number;
         }
     ];
     favorites?: Array<string>;
-    cart?: [
-        {
-            productID: string;
-            amount: number;
-        }
-    ];
+    cart?: Array<MyProducts>;
 };
 
 export const userSchema = new Schema<UserI>({

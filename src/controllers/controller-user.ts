@@ -5,6 +5,7 @@ import { BasicRepo, BasicRepo2 } from '../repository/repository-Interface.js';
 import { HTTPError } from '../interfaces/error.js';
 import { createToken, passwordValidate } from '../services/auth.js';
 import { ProductI } from '../entities/product.js';
+import { ExtraRequest } from '../middlewares/interceptors.js';
 
 const debug = createDebug('retro-back:controller:user');
 
@@ -85,7 +86,7 @@ export class UserController {
             next(this.#createHttpError(error as Error));
         }
     }
-    async addFavorites(req: Request, resp: Response, next: NextFunction) {
+    async addFavorites(req: extra, resp: Response, next: NextFunction) {
         try {
             debug('addFavorites');
             const user = await this.UserRepository.get(req.params.id);
@@ -105,7 +106,11 @@ export class UserController {
             next(this.#createHttpError(error as Error));
         }
     }
-    async deleteFavorites(req: Request, resp: Response, next: NextFunction) {
+    async deleteFavorites(
+        req: ExtraRequest,
+        resp: Response,
+        next: NextFunction
+    ) {
         try {
             debug('deleteFavorites');
             const user = await this.UserRepository.get(req.params.id);
@@ -124,16 +129,17 @@ export class UserController {
             next(this.#createHttpError(error as Error));
         }
     }
-    async addCart(req: Request, resp: Response, next: NextFunction) {
+    async addCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('addCart');
-            console.log('esto es lo que busca');
             const user = await this.UserRepository.get(req.params.id);
-            if (user.cart.find((item) => item.toString() === req.body.id)) {
-                throw Error('duplicate ');
-            }
+            //pendiente de revisar
+            // if (user.cart.find((item) => item.toString() === req.body.id)) {
+            //     throw Error('duplicate ');
+            // }
+            // user.cart.forEach((item) => console.log(item.product._id));
             user.cart.push({
-                productID: req.body.id,
+                product: req.body.id, // revisar
                 amount: req.body.amount,
             });
             const userUpdate = await this.UserRepository.patch(
@@ -143,6 +149,53 @@ export class UserController {
 
             resp.status(202);
             resp.json({ userUpdate });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async updateCart(req: ExtraRequest, resp: Response, next: NextFunction) {
+        try {
+            debug('updateCartAmount');
+            //viendo si me hace falta lo del payload
+            // if (!req.payload) {
+            //     throw new Error('Invalid payload');
+            // }
+            const user = await this.UserRepository.get(req.params.id);
+
+            const userProduct = await user.cart.find((item) => {
+                console.log(item, 'soy un user');
+
+                return (item.product as any)._id.toString() === req.body.id;
+            });
+            if (!userProduct) {
+                throw new Error('Not found id');
+            }
+            userProduct.amount = req.body.amount;
+            const userAmountUpdate = await this.UserRepository.patch(
+                req.params.id,
+                user
+            );
+
+            resp.json({ userAmountUpdate });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async deleteCart(req: ExtraRequest, resp: Response, next: NextFunction) {
+        try {
+            debug('deleteCart');
+            const user = await this.UserRepository.get(req.params.id);
+            if (
+                !user.favorites.find((item) => item.toString() === req.body.id)
+            ) {
+                throw Error('Not Found id');
+            }
+            user.favorites = user.favorites.filter(
+                (item) => item.toString() !== req.body.id
+            );
+            await this.UserRepository.patch(req.params.id, user);
+            resp.status(202);
+            resp.json({ user });
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }

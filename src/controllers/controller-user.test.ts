@@ -44,7 +44,7 @@ describe('Given UserController', () => {
             req = {};
             resp = {};
             req.payload = { id: userId };
-            req.params = { productId: '6388ee3b4edce8fdd9fa1c11' };
+            req.params = { product: '6388ee3b4edce8fdd9fa1c11' };
             req.body = { amount: 3 };
             resp.status = jest.fn().mockReturnValue(resp);
             next = jest.fn();
@@ -64,7 +64,7 @@ describe('Given UserController', () => {
                 },
             });
         });
-        test('Then addFav should have been called', async () => {
+        test('Then addCart should have been called', async () => {
             const mockData = [
                 {
                     name: 'Pepe',
@@ -91,6 +91,29 @@ describe('Given UserController', () => {
             );
             expect(resp.json).toHaveBeenCalled();
         });
+        // test if cart is duplicated
+        // test('Then addCart should have been called but return one error', async () => {
+        //     const error = new Error('duplicate');
+        //     const mockData = [
+        //         {
+        //             name: 'Pepe',
+        //             email: 'pepe@gmail.com',
+        //             id: '123456789009876543211234',
+        //             password: '1234',
+        //             cart: [{ id: '638c981be950874190b97fb7' }],
+        //         },
+        //     ];
+        //     req.params = { id: '123456789009876543211234' }
+        //     req.body = {id:'638c981be950874190b97fb7' }
+        //     repository.get = jest.fn().mockResolvedValue(mockData);
+
+        //     await userController.addCart(
+        //         req as ExtraRequest,
+        //         resp as Response,
+        //         next
+        //     );
+        //     expect(error).toBeInstanceOf(Error);
+        // });
 
         test('Then login should have been called', async () => {
             (passwordValidate as jest.Mock).mockResolvedValue(true);

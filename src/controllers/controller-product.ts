@@ -20,7 +20,7 @@ export class ProductController {
         try {
             debug('getAll');
             const getProducts = await this.ProductRepository.getAll();
-            if (!getProducts) {
+            if (getProducts.length < 1) {
                 throw new Error('no data');
             }
             const Products = getProducts.map((data) => data);

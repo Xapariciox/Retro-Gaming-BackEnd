@@ -41,6 +41,16 @@ describe('Given the Product Controller', () => {
             );
             expect(resp.json).toHaveBeenCalledWith(mockProduct);
         });
+        test('when the array is empty', async () => {
+            const error = new Error('Not found id');
+            productRepo.getAll = jest.fn().mockResolvedValue([]);
+            await productController.getAll(
+                req as Request,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
     });
     describe('when we run get', () => {
         test('it should an Product by id', async () => {
@@ -117,6 +127,20 @@ describe('Given the Product Controller', () => {
             expect(resp.json).toHaveBeenCalledWith({
                 products: { name: 'rodrigo' },
             });
+        });
+    });
+    describe('when we instantiate find but return an array empty', () => {
+        req.params = { key: '' };
+        req.params = { value: '' };
+        test('when the array is empty', async () => {
+            const error = new Error('Not found id');
+            productRepo.find = jest.fn().mockResolvedValue([]);
+            await productController.find(
+                req as Request,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
         });
     });
 });
