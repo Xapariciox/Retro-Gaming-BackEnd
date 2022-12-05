@@ -4,6 +4,7 @@ import { ProductI } from './product';
 export type MyProducts = {
     product: string | ProductI;
     amount: number;
+    isBuy: boolean;
 };
 export type UserI = {
     id: string;
@@ -73,6 +74,10 @@ export const userSchema = new Schema<UserI>({
                 ref: 'Product',
             },
             amount: Number,
+            isBuy: {
+                type: Boolean,
+                default: false,
+            },
         },
     ],
 });

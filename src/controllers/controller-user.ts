@@ -141,8 +141,9 @@ export class UserController {
                 throw Error('duplicate favorites');
             }
             user.cart.push({
-                product: req.body.id, // revisar
+                product: req.body.id,
                 amount: req.body.amount,
+                isBuy: false,
             });
             const userUpdate = await this.UserRepository.patch(
                 req.params.id,
