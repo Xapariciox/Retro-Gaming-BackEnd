@@ -30,7 +30,7 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
     describe('when it has been run get and it has called Model.findById', () => {
         const spyModel = jest.spyOn(User, 'findById');
         test('then, the id exist in the collecion returned the user ', async () => {
-            const result = await repository.get(testIds[0]);
+            const result = await repository.getForMethods(testIds[0]);
             expect(spyModel).toHaveBeenCalled();
             expect(result.name).toEqual(mockData[0].name);
         });
@@ -40,7 +40,7 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         test('then, the id does not exist in the collection returned one Error ', async () => {
             expect(spyModel).toHaveBeenCalled();
             expect(async () => {
-                await repository.get(testIds[2]);
+                await repository.getForMethods(testIds[2]);
             }).rejects.toThrowError(mongoose.MongooseError);
         });
     });

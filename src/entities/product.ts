@@ -1,9 +1,10 @@
 import { model, Schema, Types } from 'mongoose';
 export type ProductI = {
+    _id?: string;
     id: Types.ObjectId;
     name: string;
     image: string;
-    date: number;
+    date: string;
     description: string;
     stock: number;
     brand: string;
@@ -13,7 +14,7 @@ export type ProductI = {
 export type ProtoProduct = {
     name?: string;
     image?: string;
-    date?: number;
+    date?: string;
     description?: string;
     stock?: number;
     brand?: string;
@@ -30,7 +31,7 @@ export const productSchema = new Schema<ProductI>({
         type: String,
         required: true,
     },
-    date: Number,
+    date: String,
     description: String,
     stock: Number,
     brand: String,

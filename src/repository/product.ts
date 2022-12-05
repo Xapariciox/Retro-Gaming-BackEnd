@@ -35,7 +35,6 @@ export class ProductRepository implements BasicRepo2<ProductI> {
     async post(data: ProtoProduct): Promise<ProductI> {
         debug('post', data);
         const result = await await this.#Model.create(data);
-        console.log(result);
         return result;
     }
 }

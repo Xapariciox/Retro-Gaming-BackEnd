@@ -28,3 +28,13 @@ usersRouter.patch(
     controller.deleteFavorites.bind(controller)
 );
 usersRouter.patch('/addcart/:id', logged, controller.addCart.bind(controller));
+usersRouter.patch(
+    '/updatecart/:id',
+    logged,
+    controller.updateCart.bind(controller)
+);
+usersRouter.patch(
+    '/deletecart/:id',
+    logged,
+    controller.deleteCart.bind(controller)
+);

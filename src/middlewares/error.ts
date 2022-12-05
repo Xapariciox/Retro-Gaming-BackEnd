@@ -8,7 +8,6 @@ export const errorManager = (
     resp: Response,
     _next: NextFunction
 ) => {
-    _next;
     debug(error.name, error.statusCode, error.statusMessage, error.message);
     let status = error.statusCode || 500;
     if (error.name === 'ValidationError') {

@@ -17,14 +17,19 @@ export class UserRepository implements BasicRepo<UserI> {
     private constructor() {
         debug('instance');
     }
+    async getForMethods(id: id): Promise<UserI> {
+        debug('get', id);
+        const result = await this.#Model.findById(id);
+        if (!result) throw new Error('Not found id');
+
+        return result;
+    }
     async get(id: id): Promise<UserI> {
         debug('get', id);
-        const result = await this.#Model
-            .findById(id)
-            .populate('favorites')
-            .populate('cart.product');
+        const result = await this.#Model.findById(id);
         if (!result) throw new Error('Not found id');
-        return result;
+
+        return (await result.populate('favorites')).populate('cart.product');
     }
     async create(data: Partial<UserI>): Promise<UserI> {
         debug('post', data.email);
@@ -42,11 +47,12 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     async patch(id: id, data: Partial<UserI>): Promise<UserI> {
         debug('patch', id);
-        const result = await this.#Model
-            .findByIdAndUpdate(id, data, {
-                new: true,
-            })
-            .populate('favorites');
+        const result = await this.#Model.findByIdAndUpdate(id, data, {
+            new: true,
+        });
+        //no se si lo necesitare front
+        // .populate('favorites')
+        // .populate('cart.product');
         if (!result) throw new Error('Not found id');
 
         return result;
