@@ -86,10 +86,10 @@ export class UserController {
             next(this.#createHttpError(error as Error));
         }
     }
-    async addFavorites(req: extra, resp: Response, next: NextFunction) {
+    async addFavorites(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('addFavorites');
-            const user = await this.UserRepository.get(req.params.id);
+            const user = await this.UserRepository.getForMethods(req.params.id);
             if (
                 user.favorites.find((item) => item.toString() === req.body.id)
             ) {
@@ -113,7 +113,7 @@ export class UserController {
     ) {
         try {
             debug('deleteFavorites');
-            const user = await this.UserRepository.get(req.params.id);
+            const user = await this.UserRepository.getForMethods(req.params.id);
             if (
                 !user.favorites.find((item) => item.toString() === req.body.id)
             ) {
@@ -132,12 +132,14 @@ export class UserController {
     async addCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('addCart');
-            const user = await this.UserRepository.get(req.params.id);
-            //pendiente de revisar
-            // if (user.cart.find((item) => item.toString() === req.body.id)) {
-            //     throw Error('duplicate ');
-            // }
-            // user.cart.forEach((item) => console.log(item.product._id));
+            const user = await this.UserRepository.getForMethods(req.params.id);
+            if (
+                user.cart.find(
+                    (item) => item.product.toString() === req.body.id
+                )
+            ) {
+                throw Error('duplicate favorites');
+            }
             user.cart.push({
                 product: req.body.id, // revisar
                 amount: req.body.amount,
@@ -160,12 +162,10 @@ export class UserController {
             // if (!req.payload) {
             //     throw new Error('Invalid payload');
             // }
-            const user = await this.UserRepository.get(req.params.id);
+            const user = await this.UserRepository.getForMethods(req.params.id);
 
             const userProduct = await user.cart.find((item) => {
-                console.log(item, 'soy un user');
-
-                return (item.product as any)._id.toString() === req.body.id;
+                return item.product.toString() === req.body.id;
             });
             if (!userProduct) {
                 throw new Error('Not found id');
@@ -183,15 +183,16 @@ export class UserController {
     }
     async deleteCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
-            debug('deleteCart');
-            const user = await this.UserRepository.get(req.params.id);
-            if (
-                !user.favorites.find((item) => item.toString() === req.body.id)
-            ) {
-                throw Error('Not Found id');
-            }
-            user.favorites = user.favorites.filter(
+            debug('deleteFavorites');
+            const user = await this.UserRepository.getForMethods(req.params.id);
+            const userProduct = await user.cart.filter(
                 (item) => item.toString() !== req.body.id
+            );
+            if (!userProduct) {
+                throw new Error('Not found id');
+            }
+            user.cart = await user.cart.filter(
+                (item) => item.product.toString() !== req.body.id
             );
             await this.UserRepository.patch(req.params.id, user);
             resp.status(202);

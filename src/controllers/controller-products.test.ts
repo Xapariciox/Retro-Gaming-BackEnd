@@ -16,7 +16,7 @@ describe('Given the Product Controller', () => {
         .fn()
         .mockResolvedValue([{ name: 'Consola', image: 'image.png' }]);
     productRepo.get = jest.fn().mockRejectedValue(mockResolvedValue);
-    userRepo.get = jest.fn().mockResolvedValue({
+    userRepo.getForMethods = jest.fn().mockResolvedValue({
         name: 'Ango',
         email: 'ango123@gmail.com',
         password: '1234',

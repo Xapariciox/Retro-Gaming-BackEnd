@@ -30,7 +30,7 @@ describe('Given UserController', () => {
             id: userId,
             name: 'carlos',
         });
-        repository.get = jest.fn().mockResolvedValue({
+        repository.getForMethods = jest.fn().mockResolvedValue({
             id: userId,
             name: 'carlos',
         });
@@ -82,7 +82,7 @@ describe('Given UserController', () => {
             productRepo.get = jest
                 .fn()
                 .mockResolvedValue('638c981be950874190b97fb8');
-            repository.get = jest.fn().mockResolvedValue(mockData[0]);
+            repository.getForMethods = jest.fn().mockResolvedValue(mockData[0]);
 
             await userController.addCart(
                 req as ExtraRequest,

@@ -17,15 +17,19 @@ export class UserRepository implements BasicRepo<UserI> {
     private constructor() {
         debug('instance');
     }
-    async get(id: id): Promise<UserI> {
+    async getForMethods(id: id): Promise<UserI> {
         debug('get', id);
-        const result = await this.#Model
-            .findById(id)
-            .populate('favorites')
-            .populate('cart.product');
+        const result = await this.#Model.findById(id);
         if (!result) throw new Error('Not found id');
 
         return result;
+    }
+    async get(id: id): Promise<UserI> {
+        debug('get', id);
+        const result = await this.#Model.findById(id);
+        if (!result) throw new Error('Not found id');
+
+        return (await result.populate('favorites')).populate('cart.product');
     }
     async create(data: Partial<UserI>): Promise<UserI> {
         debug('post', data.email);

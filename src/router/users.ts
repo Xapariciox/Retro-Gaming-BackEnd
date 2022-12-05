@@ -33,3 +33,8 @@ usersRouter.patch(
     logged,
     controller.updateCart.bind(controller)
 );
+usersRouter.patch(
+    '/deletecart/:id',
+    logged,
+    controller.deleteCart.bind(controller)
+);
