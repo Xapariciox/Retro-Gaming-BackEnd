@@ -117,7 +117,7 @@ export class UserController {
             if (
                 !user.favorites.find((item) => item.toString() === req.body.id)
             ) {
-                throw Error('Not Found id');
+                throw Error('Not found id');
             }
             user.favorites = user.favorites.filter(
                 (item) => item.toString() !== req.body.id
@@ -184,7 +184,7 @@ export class UserController {
     }
     async deleteCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
-            debug('deleteFavorites');
+            debug('deleteCart');
             const user = await this.UserRepository.getForMethods(req.params.id);
             const userProduct = await user.cart.filter(
                 (item) => item.toString() !== req.body.id
@@ -198,6 +198,24 @@ export class UserController {
             await this.UserRepository.patch(req.params.id, user);
             resp.status(202);
             resp.json({ user });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
+    async buyCart(req: ExtraRequest, resp: Response, next: NextFunction) {
+        try {
+            debug('buyCart');
+            const user = await this.UserRepository.getForMethods(req.params.id);
+            user.cart.forEach((item) => (item.isBuy = true));
+            const userUpdate = user.cart;
+            user.purchasedProducts = [...user.purchasedProducts, ...userUpdate];
+            user.cart = [];
+            const userToResp = await this.UserRepository.patch(
+                req.params.id,
+                user
+            );
+            resp.status(202);
+            resp.json({ userToResp });
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }

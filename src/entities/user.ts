@@ -12,12 +12,7 @@ export type UserI = {
     email: string;
     imageProfile: string;
     password: string;
-    purchasedProducts: [
-        {
-            product: string;
-            amount: number;
-        }
-    ];
+    purchasedProducts: Array<MyProducts>;
     favorites: Array<string>;
     cart: Array<MyProducts>;
 };

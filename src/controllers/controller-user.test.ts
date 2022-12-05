@@ -65,56 +65,6 @@ describe('Given UserController', () => {
                 },
             });
         });
-        // test('Then addCart should have been called', async () => {
-        //     const mockData = [
-        //         {
-        //             name: 'Pepe',
-        //             email: 'pepe@gmail.com',
-        //             id: '123456789009876543211234',
-        //             password: '1234',
-        //             cart: [{ id: '638c981be950874190b97fb7' }],
-        //         },
-        //     ];
-        //     repository.patch = jest.fn().mockResolvedValue(mockData);
-
-        //     (req as Request).body = { id: '123456789009876543211234' };
-        //     req.params = { id: '638c981be950874190b97fb8' };
-
-        //     productRepo.get = jest
-        //         .fn()
-        //         .mockResolvedValue('638c981be950874190b97fb8');
-        //     repository.getForMethods = jest.fn().mockResolvedValue(mockData[0]);
-
-        //     await userController.addCart(
-        //         req as ExtraRequest,
-        //         resp as Response,
-        //         next
-        //     );
-        //     expect(resp.json).toHaveBeenCalled();
-        // });
-        // test if cart is duplicated
-        // test('Then addCart should have been called but return one error', async () => {
-        //     const error = new Error('duplicate');
-        //     const mockData = [
-        //         {
-        //             name: 'Pepe',
-        //             email: 'pepe@gmail.com',
-        //             id: '123456789009876543211234',
-        //             password: '1234',
-        //             cart: [{ id: '638c981be950874190b97fb7' }],
-        //         },
-        //     ];
-        //     req.params = { id: '123456789009876543211234' }
-        //     req.body = {id:'638c981be950874190b97fb7' }
-        //     repository.get = jest.fn().mockResolvedValue(mockData);
-
-        //     await userController.addCart(
-        //         req as ExtraRequest,
-        //         resp as Response,
-        //         next
-        //     );
-        //     expect(error).toBeInstanceOf(Error);
-        // });
 
         test('Then login should have been called', async () => {
             (passwordValidate as jest.Mock).mockResolvedValue(true);
