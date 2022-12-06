@@ -138,7 +138,7 @@ export class UserController {
                     (item) => item.product.toString() === req.body.id
                 )
             ) {
-                throw Error('duplicate favorites');
+                throw Error('duplicate id in cart');
             }
             user.cart.push({
                 product: req.body.id,
@@ -168,6 +168,7 @@ export class UserController {
             const userProduct = await user.cart.find((item) => {
                 return item.product.toString() === req.body.id;
             });
+
             if (!userProduct) {
                 throw new Error('Not found id');
             }
@@ -186,10 +187,12 @@ export class UserController {
         try {
             debug('deleteCart');
             const user = await this.UserRepository.getForMethods(req.params.id);
+
             const userProduct = await user.cart.filter(
-                (item) => item.toString() !== req.body.id
+                (item) => item.product.toString() !== req.body.id
             );
-            if (!userProduct) {
+
+            if (userProduct.length < 1) {
                 throw new Error('Not found id');
             }
             user.cart = await user.cart.filter(
@@ -207,9 +210,13 @@ export class UserController {
             debug('buyCart');
             const user = await this.UserRepository.getForMethods(req.params.id);
             user.cart.forEach((item) => (item.isBuy = true));
-            const userUpdate = user.cart;
-            user.purchasedProducts = [...user.purchasedProducts, ...userUpdate];
+            if (user.cart.length < 1) {
+                throw new Error('Cart is Empty');
+            }
+            user.purchasedProducts = user.cart;
+
             user.cart = [];
+
             const userToResp = await this.UserRepository.patch(
                 req.params.id,
                 user

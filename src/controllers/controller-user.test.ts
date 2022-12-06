@@ -35,6 +35,11 @@ describe('Given UserController', () => {
             id: userId,
             name: 'carlos',
         });
+        repository.delete = jest.fn().mockResolvedValue({});
+        repository.get = jest.fn().mockResolvedValue({
+            id: userId,
+            name: 'pepe',
+        });
 
         const userController = new UserController(repository, productRepo);
 
@@ -46,7 +51,7 @@ describe('Given UserController', () => {
             resp = {};
             req.payload = { id: userId };
             req.params = { product: '6388ee3b4edce8fdd9fa1c11' };
-            req.body = { amount: 3 };
+            req.body = { id: '638dbf0228fc47a26a8055d7' };
             resp.status = jest.fn().mockReturnValue(resp);
             next = jest.fn();
             resp.json = jest.fn();
@@ -64,6 +69,45 @@ describe('Given UserController', () => {
                     name: 'pepe',
                 },
             });
+        });
+        test('Then  GET should have been called', async () => {
+            req.params = { id: '638901f4887798b01d443ed2' };
+            await userController.get(req as Request, resp as Response, next);
+
+            expect(resp.json).toHaveBeenCalledWith({
+                user: {
+                    id: userId,
+                    name: 'pepe',
+                },
+            });
+        });
+        test('Then delete should have been called', async () => {
+            req.params = { token: '638901f4887798b01d443ed2' };
+
+            await userController.deleteAccount(
+                req as Request,
+                resp as Response,
+                next
+            );
+
+            expect(resp.json).toHaveBeenCalledWith({ id: {} });
+        });
+        test('Then deleteFavorite should have been called', async () => {
+            req.params = { id: '638901f4887798b01d443ed2' };
+            req.body = { id: '638901f4887798b01d443ed2' };
+
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                _id: '638901f4887798b01d443ed2',
+                favorites: ['638901f4887798b01d443ed2'],
+            });
+
+            await userController.deleteFavorites(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+
+            expect(resp.json).toHaveBeenCalled();
         });
 
         test('Then login should have been called', async () => {
@@ -97,6 +141,84 @@ describe('Given UserController', () => {
             );
             expect(resp.json).toHaveBeenCalled();
         });
+        test('when the run controller addCart', async () => {
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        _id: '638901f4887798b01d443ed2',
+                        product: '638901f4887798b01d443ed2',
+                    },
+                ],
+            });
+            req.params = { id: userId.toString() };
+            req.body = { id: productId };
+            await userController.addCart(
+                req as Request,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalled();
+        });
+        test('when the run controller deleteCart', async () => {
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        _id: '638901f4887798b01d443ed2',
+                        product: '638901f4887798b01d443ed2',
+                    },
+                ],
+            });
+            req.params = { id: userId.toString() };
+            req.body = { id: productId };
+            await userController.deleteCart(
+                req as Request,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalled();
+        });
+        test('when the run controller updateCart', async () => {
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        product: userId,
+                        amount: 4,
+                        isBuy: false,
+                        _id: userId,
+                    },
+                ],
+            });
+            req.params = { id: '638e96a104fe97fd938da8ad' };
+            req.body = { id: userId.toString() };
+
+            await userController.updateCart(
+                req as Request,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalled();
+        });
+        test('when the run controller buycart', async () => {
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        product: userId,
+                        amount: 4,
+                        isBuy: false,
+                        _id: userId,
+                    },
+                ],
+            });
+            req.params = { id: '638e96a104fe97fd938da8ad' };
+            req.body = { id: userId.toString() };
+
+            await userController.buyCart(
+                req as Request,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalled();
+        });
         test('when the run controller addFavorites but we have id duplicated', async () => {
             repository.getForMethods = jest.fn().mockResolvedValue({
                 favorites: [{ id: '638dbf0228fc47a26a8055d7' }],
@@ -109,6 +231,79 @@ describe('Given UserController', () => {
                 next
             );
             expect(resp.json).toHaveBeenCalled();
+        });
+        test('when the run controller addFavorites but we have id duplicated req.params', async () => {
+            req.params = { id: '638901f4887798b01d443ed2' };
+            req.body = { id: '638901f4887798b01d443ed5' };
+            const error = new Error('duplicate id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        _id: '638901f4887798b01d443ed2',
+                        product: '638901f4887798b01d443ed5',
+                    },
+                ],
+            });
+            await userController.addCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('when the run controller deleteCart but we dont have a id valid', async () => {
+            req.params = { id: '638901f4887798b01d443ed2' };
+            req.body = { id: '638901f4887798b01d443ed5' };
+            const error = new Error('Not found id');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        _id: '638901f4887798b01d443ed2',
+                        product: '638901f4887798b01d443ed5',
+                    },
+                ],
+            });
+            await userController.deleteCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('when the run controller updateCart but we dont any id ', async () => {
+            req.params = { id: '638901f4887798b01d443ed2' };
+            req.body = { id: '638901f4887798b01d443ed5' };
+            const error = new Error('duplicate id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        product: userId,
+                        amount: 4,
+                        isBuy: false,
+                        _id: '638901f4887798b01d443ed2',
+                    },
+                ],
+            });
+            await userController.updateCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('when the run controller buycart but the cart is empty', async () => {
+            req.params = { id: '638901f4887798b01d443ed2' };
+
+            const error = new Error('duplicate id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [],
+            });
+            await userController.buyCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
         });
 
         describe('When userController is not valid', () => {
@@ -180,14 +375,59 @@ describe('Given UserController', () => {
                 expect(error).toBeInstanceOf(Error);
                 expect(error).toBeInstanceOf(HTTPError);
             });
-            test('when the run controller addFavorites but we have id duplicated', async () => {
-                repoUser.getForMethods = jest.fn().mockResolvedValue({
-                    favorites: [{ id: '638dbf0228fc47a26a8055d7' }],
-                });
-                req.params = { id: userId.toString() };
-                req.body = { id: '638dbf0228fc47a26a8055d7' };
-                await userController.addFavorites(
+            test('when get throws an error', async () => {
+                const error = new Error('Not found id');
+                await userController.get(
                     req as Request,
+                    resp as Response,
+                    next
+                );
+                expect(error).toBeInstanceOf(Error);
+            });
+            test('when DeleteFavorites throws an error', async () => {
+                const error = new Error('Not found id');
+                await userController.deleteFavorites(
+                    req as Request,
+                    resp as Response,
+                    next
+                );
+                expect(error).toBeInstanceOf(Error);
+            });
+            test('when DeleteFavorites throws an error not found id', async () => {
+                req.params = { id: '638901f4887798b01d443ed2' };
+                req.body = { id: '638901f4887798b01d443ed2' };
+
+                repoUser.getForMethods = jest.fn().mockResolvedValue({
+                    _id: '638901f4887798b01d443ed2',
+                    favorites: ['638901f4887798b01d443ed5'],
+                });
+                const error = new Error('Not found id');
+                await userController.deleteFavorites(
+                    req as Request,
+                    resp as Response,
+                    next
+                );
+                expect(error).toBeInstanceOf(Error);
+            });
+            test('Then delete account Error ', async () => {
+                await userController.deleteAccount(
+                    req as Request,
+                    resp as Response,
+                    next
+                );
+                expect(error).toBeInstanceOf(Error);
+                expect(error).toBeInstanceOf(HTTPError);
+            });
+            test('when the run controller addFavorites but we have id duplicated req.params', async () => {
+                req.params = { id: '638901f4887798b01d443ed2' };
+                req.body = { id: '638901f4887798b01d443ed5' };
+                const error = new Error('Not found id');
+                repoUser.getForMethods = jest.fn().mockResolvedValue({
+                    id: '638901f4887798b01d443ed2',
+                    favorites: ['638901f4887798b01d443ed5'],
+                });
+                await userController.addFavorites(
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
