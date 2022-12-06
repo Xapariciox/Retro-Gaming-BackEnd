@@ -21,7 +21,6 @@ describe('Given the logged interceptor', () => {
                         'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzOGE1NTA5ODkyNGQ1MDMzZWFiNWQyNiIsIm5hbWUiOiJhbG9uc28iLCJlbWFpbCI6InBydWViYWRlbGV0ZUBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCQyZ0FmQ2c5R29HZ1JIakF1MjZpZGRlR2tqUmdMM3V4Z2UwZGpWWkpYUzFqWHU1QTZwbnY0cSIsImlhdCI6MTY3MDMyMjA4Nn0.4XcxrJeWU6jFIXBuyef2eeY0W77tLzCyYeJG2mNf9Cg'
                     ),
             };
-            respository;
 
             logged(req as ExtraRequest, res as Response, next);
 
