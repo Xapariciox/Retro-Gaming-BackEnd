@@ -3,7 +3,7 @@ import { UserI } from '../entities/user';
 import { BasicRepo } from '../repository/repository-Interface';
 import { UserRepository } from '../repository/user';
 import { ExtraRequest, logged } from './interceptors';
-// jest.mock('../services/auth');
+
 describe('Given the logged interceptor', () => {
     let next: NextFunction;
     let res: Partial<Response>;
