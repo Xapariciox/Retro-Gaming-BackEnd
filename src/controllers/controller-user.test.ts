@@ -416,6 +416,7 @@ describe('Given UserController', () => {
                 expect(error).toBeInstanceOf(Error);
             });
             test('Then delete account Error ', async () => {
+                repoUser.delete = jest.fn().mockRejectedValue(['Product']);
                 await userController.deleteAccount(
                     req as Request,
                     resp as Response,
