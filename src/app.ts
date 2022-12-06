@@ -51,6 +51,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 //     </body>`;
 
+//ver si me hace falta
 // app.get('/', (_req, res) => {
 //     res.send(template).end();
 // });
