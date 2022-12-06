@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { createHttpError } from '../interfaces/create-http-error.js';
-import { ExtraRequest, logged } from './interceptors.js';
+import { logged } from './interceptors.js';
 
 describe('Given the logged interceptor', () => {
     describe('When its invoked', () => {
