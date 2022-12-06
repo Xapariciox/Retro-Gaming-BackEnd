@@ -3,15 +3,13 @@ import { UserI } from '../entities/user';
 import { BasicRepo } from '../repository/repository-Interface';
 import { UserRepository } from '../repository/user';
 import { readToken } from '../services/auth';
-import { ExtraRequest, logged } from './interceptors';
+import { logged } from './interceptors';
 jest.mock('../services/auth');
 describe('Given the logged interceptor', () => {
     let next: NextFunction;
-    let res: Partial<Response>;
-    const respository: BasicRepo<UserI> = UserRepository.getInstance();
+    UserRepository.getInstance();
     beforeEach(() => {
         next = jest.fn();
-        res = {};
     });
     describe('When its invoked', () => {
         test('When the authString is empty, it should return an error', () => {
