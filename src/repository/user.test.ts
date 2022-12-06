@@ -51,6 +51,12 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
             expect(spyModel).toHaveBeenCalled();
             expect(result.name).toEqual(mockData[0].name);
         });
+        test('Then it returns the user in the collection', async () => {
+            const spyModel = jest.spyOn(User, 'findById');
+            const result = await repository.get(testIds[0]);
+            expect(spyModel).toHaveBeenCalled();
+            expect(result.name).toEqual(mockData[0].name);
+        });
 
         test('Then if the data has been invalid, it should be throw an error', async () => {
             expect(async () => {

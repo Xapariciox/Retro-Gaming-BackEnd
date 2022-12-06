@@ -21,7 +21,6 @@ export const logged = (
     }
     try {
         const token = authString.slice(7);
-        readToken(token);
         req.payload = readToken(token);
         next();
     } catch (error) {

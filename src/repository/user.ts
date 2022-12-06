@@ -26,13 +26,16 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     async get(id: id): Promise<UserI> {
         debug('get', id);
-        const result = await this.#Model.findById(id);
+        const result = await this.#Model
+            .findById(id)
+            .populate('favorites')
+            .populate('cart.product')
+            .populate('purchasedProducts.product');
         if (!result) throw new Error('Not found id');
 
-        return (
-            await (await result.populate('favorites')).populate('cart.product')
-        ).populate('purchasedProducts.product');
+        return result as UserI;
     }
+
     async create(data: Partial<UserI>): Promise<UserI> {
         debug('post', data.email);
         if (typeof data.password !== 'string')
