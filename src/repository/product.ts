@@ -29,7 +29,6 @@ export class ProductRepository implements BasicRepo2<ProductI> {
     async find(key: string, value: string): Promise<Array<ProductI>> {
         debug('find categoria', { key });
         const result = await this.#Model.find({ [key]: value });
-        if (!result) throw new Error('Not found id');
         return result as unknown as Promise<Array<ProductI>>;
     }
     async post(data: ProtoProduct): Promise<ProductI> {
