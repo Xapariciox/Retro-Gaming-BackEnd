@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { UserI } from '../entities/user';
-import { BasicRepo } from '../repository/repository-Interface';
+
 import { UserRepository } from '../repository/user';
 import { readToken } from '../services/auth';
 import { logged } from './interceptors';
