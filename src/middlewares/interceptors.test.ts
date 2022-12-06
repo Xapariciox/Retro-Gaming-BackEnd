@@ -7,7 +7,7 @@ import { ExtraRequest, logged } from './interceptors';
 describe('Given the logged interceptor', () => {
     let next: NextFunction;
     let res: Partial<Response>;
-    const respository: BasicRepo<UserI> = UserRepository.getInstance();
+    UserRepository.getInstance();
     beforeEach(() => {
         next = jest.fn();
         res = {};
