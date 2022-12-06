@@ -200,7 +200,14 @@ describe('Given UserController', () => {
         });
         test('when the run controller buycart', async () => {
             repository.getForMethods = jest.fn().mockResolvedValue({
+                purchasedProducts: [],
                 cart: [
+                    {
+                        product: userId,
+                        amount: 4,
+                        isBuy: false,
+                        _id: userId,
+                    },
                     {
                         product: userId,
                         amount: 4,
@@ -210,7 +217,6 @@ describe('Given UserController', () => {
                 ],
             });
             req.params = { id: '638e96a104fe97fd938da8ad' };
-            req.body = { id: userId.toString() };
 
             await userController.buyCart(
                 req as Request,

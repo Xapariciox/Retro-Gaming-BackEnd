@@ -213,9 +213,7 @@ export class UserController {
             if (user.cart.length < 1) {
                 throw new Error('Cart is Empty');
             }
-            user.purchasedProducts = user.cart;
-
-            user.cart = [];
+            user.purchasedProducts.push(...user.cart);
 
             const userToResp = await this.UserRepository.patch(
                 req.params.id,
