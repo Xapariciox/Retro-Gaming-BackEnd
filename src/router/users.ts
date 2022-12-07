@@ -39,3 +39,4 @@ usersRouter.patch(
     controller.deleteCart.bind(controller)
 );
 usersRouter.patch('/buycart/:id', logged, controller.buyCart.bind(controller));
+usersRouter.patch('/updateuser/:id', logged, controller.patch.bind(controller));
