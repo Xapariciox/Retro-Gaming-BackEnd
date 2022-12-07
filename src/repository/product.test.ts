@@ -18,7 +18,7 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
     const repository = ProductRepository.getInstance();
 
     const badFormattedId = '1';
-    const invalidId = '437b472da27b69l98b1416e2';
+    const invalidId = '437b472da27b69l98b1416e6';
     let testIds: Array<string>;
     beforeAll(async () => {
         testIds = await setUpCollection();
@@ -44,6 +44,12 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
             expect(async () => {
                 await repository.get(badFormattedId);
             }).rejects.toThrowError(mongoose.Error.CastError);
+            expect(spyModel).toHaveBeenCalled();
+        });
+        test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
+            expect(async () => {
+                await repository.get('638dbf0228fc47a26a8055d9');
+            }).rejects.toThrowError(mongoose.MongooseError);
             expect(spyModel).toHaveBeenCalled();
         });
         test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {

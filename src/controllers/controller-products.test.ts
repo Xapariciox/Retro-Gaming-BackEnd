@@ -22,7 +22,7 @@ describe('Given the Product Controller', () => {
         .fn()
         .mockResolvedValue([{ name: 'Consola', image: 'image.png' }]);
 
-    const req: Partial<Request> = {};
+    const req: Partial<ExtraRequest> = {};
     const resp: Partial<Response> = {
         json: jest.fn(),
         status: jest.fn(),
@@ -57,7 +57,7 @@ describe('Given the Product Controller', () => {
             productRepo.get = jest.fn().mockResolvedValue({
                 name: 'console',
             });
-            req.params = { id: '2' };
+            req.payload = { id: '2' };
             await productController.get(
                 req as ExtraRequest,
                 resp as Response,

@@ -10,11 +10,12 @@ const controller = new UserController(
     ProductRepository.getInstance()
 );
 
-usersRouter.get('/:id', controller.get.bind(controller));
+usersRouter.get('/', logged, controller.get.bind(controller));
 usersRouter.post('/register', controller.register.bind(controller));
 usersRouter.post('/login', controller.login.bind(controller));
 usersRouter.patch(
     '/addfavorites/:id',
+    logged,
     controller.addFavorites.bind(controller)
 );
 usersRouter.delete(

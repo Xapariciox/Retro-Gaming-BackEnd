@@ -6,9 +6,7 @@ import { HTTPError } from '../interfaces/error.js';
 import { createToken, passwordValidate } from '../services/auth.js';
 import { ProductI } from '../entities/product.js';
 import { ExtraRequest } from '../middlewares/interceptors.js';
-
 const debug = createDebug('retro-back:controller:user');
-
 export class UserController {
     constructor(
         public readonly UserRepository: BasicRepo<UserI>,
@@ -52,11 +50,13 @@ export class UserController {
             next(this.#createHttpError);
         }
     }
-    async deleteAccount(req: Request, resp: Response, next: NextFunction) {
+    async deleteAccount(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
-            debug('delete', req.params.id);
+            if (!req.payload) throw new Error('Not payload');
+            debug('delete', req.payload.id);
+
             const deleteAccount = await this.UserRepository.delete(
-                req.params.id
+                req.payload.id
             );
 
             resp.json({ id: deleteAccount });
@@ -64,21 +64,23 @@ export class UserController {
             next(this.#createHttpError(error as Error));
         }
     }
-    async get(req: Request, resp: Response, next: NextFunction) {
+    async get(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('get');
-            const user = await this.UserRepository.get(req.params.id);
+            if (!req.payload) throw new Error('Not payload');
+            const user = await this.UserRepository.get(req.payload.id);
 
             resp.json({ user });
         } catch (error) {
             next(this.#createHttpError(error as Error));
         }
     }
-    async patch(req: Request, resp: Response, next: NextFunction) {
+    async patch(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('patch');
+            if (!req.payload) throw new Error('Not payload');
             const updatedUser = await this.UserRepository.patch(
-                req.params.id,
+                req.payload.id,
                 req.body
             );
             resp.json({ updatedUser });
@@ -89,7 +91,10 @@ export class UserController {
     async addFavorites(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('addFavorites');
-            const user = await this.UserRepository.getForMethods(req.params.id);
+            if (!req.payload) throw new Error('Not payload');
+            const user = await this.UserRepository.getForMethods(
+                req.payload.id
+            );
             if (
                 user.favorites.find((item) => item.toString() === req.body.id)
             ) {
@@ -97,7 +102,7 @@ export class UserController {
             }
             user.favorites.push(req.body.id);
             const userUpdate = await this.UserRepository.patch(
-                req.params.id,
+                req.payload.id,
                 user
             );
             resp.status(202);
@@ -113,7 +118,10 @@ export class UserController {
     ) {
         try {
             debug('deleteFavorites');
-            const user = await this.UserRepository.getForMethods(req.params.id);
+            if (!req.payload) throw new Error('Not payload');
+            const user = await this.UserRepository.getForMethods(
+                req.payload.id
+            );
             if (
                 !user.favorites.find((item) => item.toString() === req.body.id)
             ) {
@@ -122,7 +130,7 @@ export class UserController {
             user.favorites = user.favorites.filter(
                 (item) => item.toString() !== req.body.id
             );
-            await this.UserRepository.patch(req.params.id, user);
+            await this.UserRepository.patch(req.payload.id, user);
             resp.status(202);
             resp.json({ user });
         } catch (error) {
@@ -132,7 +140,10 @@ export class UserController {
     async addCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('addCart');
-            const user = await this.UserRepository.getForMethods(req.params.id);
+            if (!req.payload) throw new Error('Not payload');
+            const user = await this.UserRepository.getForMethods(
+                req.payload.id
+            );
             if (
                 user.cart.find(
                     (item) => item.product.toString() === req.body.id
@@ -146,7 +157,7 @@ export class UserController {
                 isBuy: false,
             });
             const userUpdate = await this.UserRepository.patch(
-                req.params.id,
+                req.payload.id,
                 user
             );
 
@@ -159,11 +170,12 @@ export class UserController {
     async updateCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('updateCartAmount');
-            //viendo si me hace falta lo del payload
-            // if (!req.payload) {
-            //     throw new Error('Invalid payload');
-            // }
-            const user = await this.UserRepository.getForMethods(req.params.id);
+
+            if (!req.payload) throw new Error('Invalid payload');
+
+            const user = await this.UserRepository.getForMethods(
+                req.payload.id
+            );
 
             const userProduct = await user.cart.find((item) => {
                 return item.product.toString() === req.body.id;
@@ -174,7 +186,7 @@ export class UserController {
             }
             userProduct.amount = req.body.amount;
             const userAmountUpdate = await this.UserRepository.patch(
-                req.params.id,
+                req.payload.id,
                 user
             );
 
@@ -186,22 +198,24 @@ export class UserController {
     async deleteCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('deleteCart');
-            const user = await this.UserRepository.getForMethods(req.params.id);
-            console.log(user);
+            if (!req.payload) throw new Error('Not payload');
+            const user = await this.UserRepository.getForMethods(
+                req.payload.id
+            );
+
             const comprobacion = user.cart.find(
                 (item) => item.product.toString() === req.body.id
             );
-            console.log(user);
+
             if (!comprobacion) {
                 throw new Error('no found id');
             }
-            console.log(user);
 
             user.cart = user.cart.filter(
                 (item) => item.product.toString() !== req.body.id
             );
 
-            await this.UserRepository.patch(req.params.id, user);
+            await this.UserRepository.patch(req.payload.id, user);
             resp.status(202);
             resp.json({ user });
         } catch (error) {
@@ -211,7 +225,10 @@ export class UserController {
     async buyCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('buyCart');
-            const user = await this.UserRepository.getForMethods(req.params.id);
+            if (!req.payload) throw new Error('Not payload');
+            const user = await this.UserRepository.getForMethods(
+                req.payload.id
+            );
             user.cart.forEach((item) => (item.isBuy = true));
             if (user.cart.length < 1) {
                 throw new Error('Cart is Empty');
@@ -219,7 +236,7 @@ export class UserController {
             user.purchasedProducts.push(...user.cart);
 
             const userToResp = await this.UserRepository.patch(
-                req.params.id,
+                req.payload.id,
                 user
             );
             resp.status(202);
