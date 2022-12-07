@@ -18,7 +18,6 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
     const repository = ProductRepository.getInstance();
 
     const badFormattedId = '1';
-    const invalidId = '437b472da27b69l98b1416e2';
     let testIds: Array<string>;
     beforeAll(async () => {
         testIds = await setUpCollection();
@@ -40,7 +39,7 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
             expect(spyModel).toHaveBeenCalled();
             expect(result.name).toEqual(mockData[0].name);
         });
-        test('Then, if the ID has been bad formatted, it should be thrown an Cast error', async () => {
+        test('hen the id have a bad formmated', async () => {
             expect(async () => {
                 await repository.get(badFormattedId);
             }).rejects.toThrowError(mongoose.Error.CastError);
@@ -48,7 +47,7 @@ describe('Given a singleton instance of the class "ProductRepository"', () => {
         });
         test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
             expect(async () => {
-                await repository.get(invalidId);
+                await repository.get('638dbf0228fc47a26a8055d9');
             }).rejects.toThrowError(mongoose.MongooseError);
             expect(spyModel).toHaveBeenCalled();
         });

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 
 import { CustomError, HTTPError } from '../interfaces/error';
 
@@ -50,7 +50,7 @@ describe('Given UserController', () => {
             req = {};
             resp = {};
             req.payload = { id: userId };
-            req.params = { product: '6388ee3b4edce8fdd9fa1c11' };
+            req.payload = { product: '6388ee3b4edce8fdd9fa1c11' };
             req.body = { id: '638dbf0228fc47a26a8055d7' };
             resp.status = jest.fn().mockReturnValue(resp);
             next = jest.fn();
@@ -59,7 +59,7 @@ describe('Given UserController', () => {
 
         test('Then register should have been called', async () => {
             await userController.register(
-                req as Request,
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
@@ -71,8 +71,12 @@ describe('Given UserController', () => {
             });
         });
         test('Then  GET should have been called', async () => {
-            req.params = { id: '638901f4887798b01d443ed2' };
-            await userController.get(req as Request, resp as Response, next);
+            req.payload = { id: '638901f4887798b01d443ed2' };
+            await userController.get(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
 
             expect(resp.json).toHaveBeenCalledWith({
                 user: {
@@ -82,10 +86,21 @@ describe('Given UserController', () => {
             });
         });
         test('Then delete should have been called', async () => {
+            req.payload = { token: '638901f4887798b01d443ed2' };
+
+            await userController.deleteAccount(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+
+            expect(resp.json).toHaveBeenCalledWith({ id: {} });
+        });
+        test('Then delete should have been called', async () => {
             req.params = { token: '638901f4887798b01d443ed2' };
 
             await userController.deleteAccount(
-                req as Request,
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
@@ -93,7 +108,7 @@ describe('Given UserController', () => {
             expect(resp.json).toHaveBeenCalledWith({ id: {} });
         });
         test('Then deleteFavorite should have been called', async () => {
-            req.params = { id: '638901f4887798b01d443ed2' };
+            req.payload = { id: '638901f4887798b01d443ed2' };
             req.body = { id: '638901f4887798b01d443ed2' };
 
             repository.getForMethods = jest.fn().mockResolvedValue({
@@ -115,7 +130,11 @@ describe('Given UserController', () => {
             (createToken as jest.Mock).mockReturnValue('token');
             req.body = { passwd: 'patata' };
 
-            await userController.login(req as Request, resp as Response, next);
+            await userController.login(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
 
             expect(resp.json).toHaveBeenCalledWith({ token: 'token' });
         });
@@ -123,19 +142,23 @@ describe('Given UserController', () => {
             repository.patch = jest
                 .fn()
                 .mockResolvedValue({ id: userId, name: 'pepe' });
-            req.params = { id: userId.toString() };
+            req.payload = { id: userId.toString() };
             req.body = { name: 'papa' };
-            await userController.patch(req as Request, resp as Response, next);
+            await userController.patch(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
             expect(resp.json).toHaveBeenCalled();
         });
         test('when the run controller addFavorites', async () => {
             repository.getForMethods = jest.fn().mockResolvedValue({
                 favorites: [],
             });
-            req.params = { id: userId.toString() };
+            req.payload = { id: userId.toString() };
             req.body = { id: productId };
             await userController.addFavorites(
-                req as Request,
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
@@ -150,10 +173,10 @@ describe('Given UserController', () => {
                     },
                 ],
             });
-            req.params = { id: userId.toString() };
+            req.payload = { id: userId.toString() };
             req.body = { id: productId };
             await userController.addCart(
-                req as Request,
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
@@ -168,10 +191,10 @@ describe('Given UserController', () => {
                     },
                 ],
             });
-            req.params = { id: userId.toString() };
+            req.payload = { id: userId.toString() };
             req.body = { id: '638901f4887798b01d443ed2' };
             await userController.deleteCart(
-                req as Request,
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
@@ -189,11 +212,31 @@ describe('Given UserController', () => {
                     },
                 ],
             });
-            req.params = { id: '638e96a104fe97fd938da8ad' };
+            req.payload = { id: '638e96a104fe97fd938da8ad' };
             req.body = { id: userId.toString() };
 
             await userController.updateCart(
-                req as Request,
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(resp.json).toHaveBeenCalled();
+        });
+        test('when the run controller updateCart', async () => {
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        product: userId,
+                        amount: 4,
+                        isBuy: false,
+                        _id: userId,
+                    },
+                ],
+            });
+            req.body = { id: userId.toString() };
+
+            await userController.updateCart(
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
@@ -217,10 +260,10 @@ describe('Given UserController', () => {
                     },
                 ],
             });
-            req.params = { id: '638e96a104fe97fd938da8ad' };
+            req.payload = { id: '638e96a104fe97fd938da8ad' };
 
             await userController.buyCart(
-                req as Request,
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
@@ -230,17 +273,17 @@ describe('Given UserController', () => {
             repository.getForMethods = jest.fn().mockResolvedValue({
                 favorites: [{ id: '638dbf0228fc47a26a8055d7' }],
             });
-            req.params = { id: userId.toString() };
+            req.payload = { id: userId.toString() };
             req.body = { id: '638dbf0228fc47a26a8055d7' };
             await userController.addFavorites(
-                req as Request,
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
             expect(resp.json).toHaveBeenCalled();
         });
-        test('when the run controller addFavorites but we have id duplicated req.params', async () => {
-            req.params = { id: '638901f4887798b01d443ed2' };
+        test('when the run controller addFavorites but we have id duplicated req.payload', async () => {
+            req.payload = { id: '638901f4887798b01d443ed2' };
             req.body = { id: '638901f4887798b01d443ed5' };
             const error = new Error('duplicate id in cart');
             repository.getForMethods = jest.fn().mockResolvedValue({
@@ -258,8 +301,27 @@ describe('Given UserController', () => {
             );
             expect(error).toBeInstanceOf(Error);
         });
+        test('', async () => {
+            req.body = { id: '638901f4887798b01d443ed5' };
+            req.payload = undefined;
+            const error = new Error('duplicate id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        _id: '638901f4887798b01d443ed2',
+                        product: '638901f4887798b01d443ed5',
+                    },
+                ],
+            });
+            await userController.addCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
         test('when the run controller deleteCart but we dont have a id valid', async () => {
-            req.params = { id: '638901f4887798b01d443ed2' };
+            req.payload = { id: '638901f4887798b01d443ed2' };
             req.body = { id: '638901f4887798b01d443ed5' };
             const error = new Error('Not found id');
             repository.getForMethods = jest.fn().mockResolvedValue({
@@ -278,7 +340,28 @@ describe('Given UserController', () => {
             expect(error).toBeInstanceOf(Error);
         });
         test('when the run controller updateCart but we dont any id ', async () => {
-            req.params = { id: '638901f4887798b01d443ed2' };
+            req.payload = { id: '638901f4887798b01d443ed2' };
+            req.body = { id: '638901f4887798b01d443ed5' };
+            const error = new Error('duplicate id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        product: userId,
+                        amount: 4,
+                        isBuy: false,
+                        _id: '638901f4887798b01d443ed2',
+                    },
+                ],
+            });
+            await userController.updateCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('when the run controller updateCart but we dont any id ', async () => {
+            req.payload = undefined;
             req.body = { id: '638901f4887798b01d443ed5' };
             const error = new Error('duplicate id in cart');
             repository.getForMethods = jest.fn().mockResolvedValue({
@@ -299,7 +382,21 @@ describe('Given UserController', () => {
             expect(error).toBeInstanceOf(Error);
         });
         test('when the run controller buycart but the cart is empty', async () => {
-            req.params = { id: '638901f4887798b01d443ed2' };
+            req.payload = { id: '638901f4887798b01d443ed2' };
+
+            const error = new Error('duplicate id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [],
+            });
+            await userController.buyCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('when the run controller buycart but we cont have a payload ', async () => {
+            req.payload = undefined;
 
             const error = new Error('duplicate id in cart');
             repository.getForMethods = jest.fn().mockResolvedValue({
@@ -322,10 +419,29 @@ describe('Given UserController', () => {
                     },
                 ],
             });
-            req.params = { id: userId.toString() };
+            req.payload = { id: userId.toString() };
             req.body = { id: productId };
             await userController.deleteCart(
-                req as Request,
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('when the run controller deleteCart but we dont have a payload', async () => {
+            const error = new Error('not found id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        _id: '638901f4887798b01d443ed2',
+                        product: '638901f4887798b01d443ed2',
+                    },
+                ],
+            });
+            req.payload = undefined;
+            req.body = { id: productId };
+            await userController.deleteCart(
+                req as ExtraRequest,
                 resp as Response,
                 next
             );
@@ -342,7 +458,7 @@ describe('Given UserController', () => {
             const repoUser = UserRepository.getInstance();
             repository.getAll = jest.fn().mockRejectedValue(['Product']);
             const userController = new UserController(repoUser, repository);
-            const req: Partial<Request> = {};
+            const req: Partial<ExtraRequest> = {};
             const resp: Partial<Response> = {
                 json: jest.fn(),
             };
@@ -362,7 +478,7 @@ describe('Given UserController', () => {
 
             test('Then register should return an error', async () => {
                 await userController.register(
-                    req as Request,
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
@@ -376,7 +492,7 @@ describe('Given UserController', () => {
                 (createToken as jest.Mock).mockReturnValue('token');
                 req.body = { name: '', passwordd: 'potato' };
                 await userController.login(
-                    req as Request,
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
@@ -385,7 +501,7 @@ describe('Given UserController', () => {
 
             test('Then patch Error', async () => {
                 await userController.patch(
-                    req as Request,
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
@@ -394,7 +510,7 @@ describe('Given UserController', () => {
             });
             test('Then addfavorites Error for duplicated id', async () => {
                 await userController.addFavorites(
-                    req as Request,
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
@@ -404,7 +520,7 @@ describe('Given UserController', () => {
             test('when get throws an error', async () => {
                 const error = new Error('Not found id');
                 await userController.get(
-                    req as Request,
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
@@ -413,14 +529,14 @@ describe('Given UserController', () => {
             test('when DeleteFavorites throws an error', async () => {
                 const error = new Error('Not found id');
                 await userController.deleteFavorites(
-                    req as Request,
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
                 expect(error).toBeInstanceOf(Error);
             });
             test('when DeleteFavorites throws an error not found id', async () => {
-                req.params = { id: '638901f4887798b01d443ed2' };
+                req.payload = { id: '638901f4887798b01d443ed2' };
                 req.body = { id: '638901f4887798b01d443ed2' };
 
                 repoUser.getForMethods = jest.fn().mockResolvedValue({
@@ -429,24 +545,25 @@ describe('Given UserController', () => {
                 });
                 const error = new Error('Not found id');
                 await userController.deleteFavorites(
-                    req as Request,
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
                 expect(error).toBeInstanceOf(Error);
             });
             test('Then delete account Error ', async () => {
+                req.payload = undefined;
                 repoUser.delete = jest.fn().mockRejectedValue(['Product']);
                 await userController.deleteAccount(
-                    req as Request,
+                    req as ExtraRequest,
                     resp as Response,
                     next
                 );
                 expect(error).toBeInstanceOf(Error);
                 expect(error).toBeInstanceOf(HTTPError);
             });
-            test('when the run controller addFavorites but we have id duplicated req.params', async () => {
-                req.params = { id: '638901f4887798b01d443ed2' };
+            test('when the run controller addFavorites but we have id duplicated req.payload', async () => {
+                req.payload = { id: '638901f4887798b01d443ed2' };
                 req.body = { id: '638901f4887798b01d443ed5' };
                 const error = new Error('Not found id');
                 repoUser.getForMethods = jest.fn().mockResolvedValue({

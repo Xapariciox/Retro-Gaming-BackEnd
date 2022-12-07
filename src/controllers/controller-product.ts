@@ -29,9 +29,10 @@ export class ProductController {
             next(this.createHttpError(error as Error));
         }
     }
-    async find(req: Request, res: Response, next: NextFunction) {
+    async find(req: ExtraRequest, res: Response, next: NextFunction) {
         try {
             debug('find');
+
             const products = await this.ProductRepository.find(
                 req.params.key,
                 req.params.value
@@ -52,9 +53,10 @@ export class ProductController {
 
     async get(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
-            debug('get', req.params.id);
+            if (!req.payload) throw new Error('Not payload');
+            debug('get', req.payload.id);
 
-            const getProduct = await this.ProductRepository.get(req.params.id);
+            const getProduct = await this.ProductRepository.get(req.payload.id);
             resp.json({ getProduct });
         } catch (error) {
             const httpError = new HTTPError(
