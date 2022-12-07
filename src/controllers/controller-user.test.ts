@@ -169,7 +169,7 @@ describe('Given UserController', () => {
                 ],
             });
             req.params = { id: userId.toString() };
-            req.body = { id: productId };
+            req.body = { id: '638901f4887798b01d443ed2' };
             await userController.deleteCart(
                 req as Request,
                 resp as Response,
@@ -177,6 +177,7 @@ describe('Given UserController', () => {
             );
             expect(resp.json).toHaveBeenCalled();
         });
+
         test('when the run controller updateCart', async () => {
             repository.getForMethods = jest.fn().mockResolvedValue({
                 cart: [
@@ -306,6 +307,25 @@ describe('Given UserController', () => {
             });
             await userController.buyCart(
                 req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('when the run controller deleteCart but we have a error', async () => {
+            const error = new Error('not found id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        _id: '638901f4887798b01d443ed2',
+                        product: '638901f4887798b01d443ed2',
+                    },
+                ],
+            });
+            req.params = { id: userId.toString() };
+            req.body = { id: productId };
+            await userController.deleteCart(
+                req as Request,
                 resp as Response,
                 next
             );
