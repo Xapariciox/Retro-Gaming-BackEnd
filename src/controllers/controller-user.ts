@@ -187,17 +187,20 @@ export class UserController {
         try {
             debug('deleteCart');
             const user = await this.UserRepository.getForMethods(req.params.id);
-
-            const userProduct = await user.cart.filter(
-                (item) => item.product.toString() !== req.body.id
+            console.log(user);
+            const comprobacion = user.cart.find(
+                (item) => item.product.toString() === req.body.id
             );
-
-            if (userProduct.length < 1) {
-                throw new Error('Not found id');
+            console.log(user);
+            if (!comprobacion) {
+                throw new Error('no found id');
             }
-            user.cart = await user.cart.filter(
+            console.log(user);
+
+            user.cart = user.cart.filter(
                 (item) => item.product.toString() !== req.body.id
             );
+
             await this.UserRepository.patch(req.params.id, user);
             resp.status(202);
             resp.json({ user });
