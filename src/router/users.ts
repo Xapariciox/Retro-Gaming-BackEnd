@@ -14,30 +14,30 @@ usersRouter.get('/', logged, controller.get.bind(controller));
 usersRouter.post('/register', controller.register.bind(controller));
 usersRouter.post('/login', controller.login.bind(controller));
 usersRouter.patch(
-    '/addfavorites/:id',
+    '/addfavorites',
     logged,
     controller.addFavorites.bind(controller)
 );
 usersRouter.delete(
-    '/delete/:id',
+    '/delete',
     logged,
     controller.deleteAccount.bind(controller)
 );
 usersRouter.patch(
-    '/deletefavorites/:id',
+    '/deletefavorites',
     logged,
     controller.deleteFavorites.bind(controller)
 );
-usersRouter.patch('/addcart/:id', logged, controller.addCart.bind(controller));
+usersRouter.patch('/addcart', logged, controller.addCart.bind(controller));
 usersRouter.patch(
-    '/updatecart/:id',
+    '/updatecart',
     logged,
     controller.updateCart.bind(controller)
 );
 usersRouter.patch(
-    '/deletecart/:id',
+    '/deletecart',
     logged,
     controller.deleteCart.bind(controller)
 );
-usersRouter.patch('/buycart/:id', logged, controller.buyCart.bind(controller));
-usersRouter.patch('/updateuser/:id', logged, controller.patch.bind(controller));
+usersRouter.patch('/buycart', logged, controller.buyCart.bind(controller));
+usersRouter.patch('/updateuser', logged, controller.patch.bind(controller));

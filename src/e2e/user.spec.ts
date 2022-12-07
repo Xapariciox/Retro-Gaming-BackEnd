@@ -19,9 +19,7 @@ describe('Given an "app" with "/users" route', () => {
         });
 
         test('Then the get to url /users/:id with invalid id should sent status 404', async () => {
-            const response = await request(app).get(
-                '/users/637d232badb33f47c88058b5'
-            );
+            const response = await request(app).get('/users');
             expect(response.status).toBe(404);
         });
         test('Then the get to url /users/register with params should sent status 503', async () => {
@@ -33,9 +31,7 @@ describe('Given an "app" with "/users" route', () => {
             expect(response.status).toBe(500);
         });
         test('Then the get to url /addfavorites/:id with params should sent status 500', async () => {
-            const response = await request(app).post(
-                '/users/addfavorites/638bd7fba686173bdc2a55f1'
-            );
+            const response = await request(app).post('/users/addfavorites');
             expect(response.status).toBe(404);
         });
     });

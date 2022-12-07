@@ -45,7 +45,7 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         });
     });
     describe('When it has been run find and it has called Model.findOne', () => {
-        const badFormattedId = '1';
+        const badFormattedIds = '3';
         const spyModel = jest.spyOn(User, 'findOne');
         test('Then, if the data has been valid, it should be returned the found user ', async () => {
             const result = await repository.find(mockData[0]);
@@ -61,19 +61,13 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
 
         test('Then, if the ID has been bad formatted, it should be thrown an Cast error', async () => {
             expect(async () => {
-                await repository.get(badFormattedId);
+                await repository.get(badFormattedIds);
             }).rejects.toThrowError(mongoose.Error.CastError);
             expect(spyModel).toHaveBeenCalled();
         });
         test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
             expect(async () => {
                 await repository.get('638dbf0228fc47a26a8055d9');
-            }).rejects.toThrowError(mongoose.MongooseError);
-            expect(spyModel).toHaveBeenCalled();
-        });
-        test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
-            expect(async () => {
-                await repository.get(invalidId);
             }).rejects.toThrowError(mongoose.MongooseError);
             expect(spyModel).toHaveBeenCalled();
         });

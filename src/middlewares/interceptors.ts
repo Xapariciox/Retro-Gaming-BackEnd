@@ -16,7 +16,7 @@ export const logged = (
     debug('logged');
     const authString = req.get('Authorization');
     if (!authString || !authString?.startsWith('Bearer')) {
-        next(new HTTPError(403, 'Forbidden', 'Por favor haz loggin'));
+        next(new HTTPError(404, 'Forbidden', 'Por favor haz loggin'));
         return;
     }
     try {
@@ -25,7 +25,7 @@ export const logged = (
         next();
     } catch (error) {
         next(
-            new HTTPError(403, 'Forbidden', 'Usuario o contraseña incorrecto')
+            new HTTPError(404, 'Forbidden', 'Usuario o contraseña incorrecto')
         );
     }
 };
