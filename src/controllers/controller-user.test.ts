@@ -137,7 +137,14 @@ describe('Given UserController', () => {
                 next
             );
 
-            expect(resp.json).toHaveBeenCalledWith({ token: 'token' });
+            expect(resp.json).toHaveBeenCalledWith({
+                token: 'token',
+                user: {
+                    id: userId,
+                    name: 'elena',
+                    email: 'sss',
+                },
+            });
         });
         test('Then login should have been called but the password is invalid', async () => {
             (passwordValidate as jest.Mock).mockResolvedValue(false);

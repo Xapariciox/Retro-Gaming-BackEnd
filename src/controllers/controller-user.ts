@@ -46,7 +46,7 @@ export class UserController {
                 email: user.email,
                 password: user.password,
             });
-            resp.json({ token });
+            resp.json({ token, user });
         } catch (error) {
             next(this.#createHttpError);
         }
