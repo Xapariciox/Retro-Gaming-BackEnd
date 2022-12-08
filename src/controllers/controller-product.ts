@@ -19,11 +19,11 @@ export class ProductController {
     async getAll(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('getAll');
-            const getProducts = await this.ProductRepository.getAll();
-            if (getProducts.length < 1) {
+            const Products = await this.ProductRepository.getAll();
+            if (Products.length < 1) {
                 throw new Error('no data');
             }
-            const Products = getProducts.map((data) => data);
+
             resp.json({ Products });
         } catch (error) {
             next(this.createHttpError(error as Error));
