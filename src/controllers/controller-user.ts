@@ -28,12 +28,11 @@ export class UserController {
             next(httpError);
         }
     }
-    async login(req: ExtraRequest, resp: Response, next: NextFunction) {
+    async login(req: Request, resp: Response, next: NextFunction) {
         try {
             debug('login', req.body.email);
-
             const user = await this.UserRepository.find({
-                email: req.body.email.json,
+                email: req.body.email,
             });
 
             const isPasswordValid = await passwordValidate(
