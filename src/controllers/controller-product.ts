@@ -53,10 +53,9 @@ export class ProductController {
 
     async get(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
-            if (!req.payload) throw new Error('Not payload');
-            debug('get', req.payload.id);
+            debug('get', req.params.id);
 
-            const getProduct = await this.ProductRepository.get(req.payload.id);
+            const getProduct = await this.ProductRepository.get(req.params.id);
             resp.json({ getProduct });
         } catch (error) {
             const httpError = new HTTPError(

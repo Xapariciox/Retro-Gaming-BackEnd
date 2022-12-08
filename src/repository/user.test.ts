@@ -67,6 +67,12 @@ describe('Given a singleton instance of the class "UserRepository"', () => {
         });
         test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
             expect(async () => {
+                await repository.get('638dbf0228fc47a26a8055d1');
+            }).rejects.toThrowError(mongoose.MongooseError);
+            expect(spyModel).toHaveBeenCalled();
+        });
+        test('Then, if the ID has been invalid, it should be thrown a Validation error', async () => {
+            expect(async () => {
                 await repository.get('638dbf0228fc47a26a8055d9');
             }).rejects.toThrowError(mongoose.MongooseError);
             expect(spyModel).toHaveBeenCalled();

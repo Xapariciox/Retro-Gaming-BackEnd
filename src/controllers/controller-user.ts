@@ -28,12 +28,14 @@ export class UserController {
             next(httpError);
         }
     }
-    async login(req: Request, resp: Response, next: NextFunction) {
+    async login(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('login', req.body.email);
+
             const user = await this.UserRepository.find({
-                email: req.body.email,
+                email: req.body.email.json,
             });
+
             const isPasswordValid = await passwordValidate(
                 req.body.password,
                 user.password
@@ -66,10 +68,9 @@ export class UserController {
     }
     async get(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
-            debug('get');
-            if (!req.payload) throw new Error('Not payload');
-            const user = await this.UserRepository.get(req.payload.id);
+            debug('get', req.params.id);
 
+            const user = await this.UserRepository.get(req.params.id);
             resp.json({ user });
         } catch (error) {
             next(this.#createHttpError(error as Error));

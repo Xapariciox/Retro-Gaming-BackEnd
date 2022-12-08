@@ -12,4 +12,4 @@ const controller = new ProductController(
 
 productRouter.get('/', controller.getAll.bind(controller));
 productRouter.get('/:key/:value', controller.find.bind(controller));
-productRouter.get('/', controller.get.bind(controller));
+productRouter.get('/:id', controller.get.bind(controller));
