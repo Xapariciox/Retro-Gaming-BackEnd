@@ -25,6 +25,7 @@ describe('Given UserController', () => {
         repository.find = jest.fn().mockResolvedValue({
             id: userId,
             name: 'elena',
+            email: 'sss',
         });
 
         repository.patch = jest.fn().mockResolvedValue({
@@ -71,7 +72,7 @@ describe('Given UserController', () => {
             });
         });
         test('Then  GET should have been called', async () => {
-            req.payload = { id: '638901f4887798b01d443ed2' };
+            req.params = { id: '638901f4887798b01d443ed2' };
             await userController.get(
                 req as ExtraRequest,
                 resp as Response,
@@ -128,7 +129,7 @@ describe('Given UserController', () => {
         test('Then login should have been called', async () => {
             (passwordValidate as jest.Mock).mockResolvedValue(true);
             (createToken as jest.Mock).mockReturnValue('token');
-            req.body = { passwd: 'patata' };
+            req.body = { email: 'sdssd', password: 'dfssds' };
 
             await userController.login(
                 req as ExtraRequest,
@@ -137,6 +138,33 @@ describe('Given UserController', () => {
             );
 
             expect(resp.json).toHaveBeenCalledWith({ token: 'token' });
+        });
+        test('Then login should have been called but the password is invalid', async () => {
+            (passwordValidate as jest.Mock).mockResolvedValue(false);
+            (createToken as jest.Mock).mockReturnValue('token');
+            req.body = { email: 'sdssd', password: 'dfssds' };
+            const error = new Error('user or password invalid');
+            await userController.login(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('Then login should have been called but the password is invalid', async () => {
+            repository.find = jest.fn().mockResolvedValue(null);
+            (passwordValidate as jest.Mock).mockResolvedValue(false);
+            (createToken as jest.Mock).mockReturnValue('token');
+            req.body = { email: 'sdssd', password: 'dfssds' };
+            const error = new Error('not found id');
+            await userController.login(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+
+            expect(error).toBeInstanceOf(Error);
         });
         test('when the run controller patch', async () => {
             repository.patch = jest

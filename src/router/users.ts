@@ -10,7 +10,7 @@ const controller = new UserController(
     ProductRepository.getInstance()
 );
 
-usersRouter.get('/', logged, controller.get.bind(controller));
+usersRouter.get('/:id', logged, controller.get.bind(controller));
 usersRouter.post('/register', controller.register.bind(controller));
 usersRouter.post('/login', controller.login.bind(controller));
 usersRouter.patch(
