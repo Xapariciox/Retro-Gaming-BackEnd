@@ -47,6 +47,8 @@ export const userSchema = new Schema<UserI>({
         type: String,
         required: true,
     },
+    imageProfile: String,
+
     purchasedProducts: [
         {
             product: {

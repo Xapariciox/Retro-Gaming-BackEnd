@@ -16,7 +16,7 @@ export class UserController {
     }
     async register(req: Request, resp: Response, next: NextFunction) {
         try {
-            debug('register');
+            debug('register', req.body);
             const user = await this.UserRepository.create(req.body);
             resp.status(201).json({ user });
         } catch (error) {
@@ -39,7 +39,7 @@ export class UserController {
                 req.body.password,
                 user.password
             );
-            if (!isPasswordValid) throw new Error();
+            if (!isPasswordValid) throw new Error('invalid authorization');
             const token = createToken({
                 id: user.id.toString(),
                 name: user.name,
@@ -90,7 +90,7 @@ export class UserController {
     }
     async addFavorites(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
-            debug('addFavorites');
+            debug('addFavorites', req.body.id);
             if (!req.payload) throw new Error('Not payload');
             const user = await this.UserRepository.getForMethods(
                 req.payload.id
