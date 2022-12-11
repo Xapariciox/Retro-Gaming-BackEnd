@@ -37,7 +37,7 @@ export class UserRepository implements BasicRepo<UserI> {
     }
 
     async create(data: Partial<UserI>): Promise<UserI> {
-        debug('post', data.email);
+        debug('post', data);
         if (typeof data.password !== 'string')
             throw new mongoose.Error.ValidationError();
         data.password = await passwordEncrypt(data.password);
@@ -50,7 +50,7 @@ export class UserRepository implements BasicRepo<UserI> {
         return result as UserI;
     }
     async patch(id: id, data: Partial<UserI>): Promise<UserI> {
-        debug('patch', id);
+        debug('patch', id, data);
         const result = await this.#Model.findByIdAndUpdate(id, data, {
             new: true,
         });
