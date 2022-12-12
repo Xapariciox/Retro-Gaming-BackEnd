@@ -46,7 +46,11 @@ export class UserRepository implements BasicRepo<UserI> {
     }
     async find(search: Partial<UserI>): Promise<UserI> {
         debug('find', search);
-        const result = await this.#Model.findOne(search);
+        const result = await this.#Model
+            .findOne(search)
+            .populate('favorites')
+            .populate('cart.product')
+            .populate('purchasedProducts.product');
         return result as UserI;
     }
     async patch(id: id, data: Partial<UserI>): Promise<UserI> {
