@@ -119,9 +119,9 @@ export const userSchema = new Schema<User>({
         unique: true,
     },
     password: String,
-    productsInCart: Array<Product>, //Preguntar si se usa mejor un id
-    purchasedProducts: Array<Product>, //Preguntar si se usa mejor un id
-    Favorites?: Array<Product> // Preguntar si se usa mejor un id
+    productsInCart: Array<Product>, 
+    purchasedProducts: Array<Product>, 
+    Favorites?: Array<Product> 
 });
 
 
