@@ -115,7 +115,7 @@ export const userSchema = new Schema<User>({
         required: true,
     },
     email: {
-        type: String,                                                           //Pendiente de cambiar
+        type: String,                                                           
         unique: true,
     },
     password: String,
@@ -132,8 +132,8 @@ export const productSchema = new Schema<Product>({
     },
     image: String,
     date: Date,
-    Description: String,   //DUDA HAY QUE AGREGAR EL TIPADO DE OBJECT.ID                             //Pendiente de cambiar
-    stock: Number,         //DUDA HAY QUE AGREGAR LA RELACION
+    Description: String,                                
+    stock: Number,         
     brand: String,
 });
 
