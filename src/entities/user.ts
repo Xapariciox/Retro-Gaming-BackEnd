@@ -70,7 +70,10 @@ export const userSchema = new Schema<UserI>({
                 type: Schema.Types.ObjectId,
                 ref: 'Product',
             },
-            amount: Number,
+            amount: {
+                type: Number,
+                default: 1,
+            },
             isBuy: {
                 type: Boolean,
                 default: false,
