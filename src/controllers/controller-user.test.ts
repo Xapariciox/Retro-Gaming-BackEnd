@@ -248,7 +248,7 @@ describe('Given UserController', () => {
                 ],
             });
             req.payload = { id: '638e96a104fe97fd938da8ad' };
-            req.body = { id: userId.toString() };
+            req.body = { product: { id: userId.toString() } };
 
             await userController.updateCart(
                 req as ExtraRequest,
@@ -268,7 +268,7 @@ describe('Given UserController', () => {
                     },
                 ],
             });
-            req.body = { id: userId.toString() };
+            req.body = { product: { id: userId.toString() } };
 
             await userController.updateCart(
                 req as ExtraRequest,
@@ -385,6 +385,27 @@ describe('Given UserController', () => {
                         amount: 4,
                         isBuy: false,
                         _id: '638901f4887798b01d443ed2',
+                    },
+                ],
+            });
+            await userController.updateCart(
+                req as ExtraRequest,
+                resp as Response,
+                next
+            );
+            expect(error).toBeInstanceOf(Error);
+        });
+        test('when the run controller updateCart but we dont any id equal ', async () => {
+            req.payload = { id: '638901f4887798b01d443ed2' };
+            req.body = { product: { id: '638901f4887798b01d443ed5' } };
+            const error = new Error('duplicate id in cart');
+            repository.getForMethods = jest.fn().mockResolvedValue({
+                cart: [
+                    {
+                        product: '638901f4887798b01d443ed6',
+                        amount: 4,
+                        isBuy: false,
+                        _id: '638901f4887798b01d443ed3',
                     },
                 ],
             });
