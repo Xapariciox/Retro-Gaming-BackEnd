@@ -178,7 +178,7 @@ export class UserController {
             );
 
             const userProduct = await user.cart.find((item) => {
-                return item.product.toString() === req.body.id;
+                return item.product.toString() === req.body.product.id;
             });
 
             if (!userProduct) {
@@ -233,7 +233,12 @@ export class UserController {
             if (user.cart.length < 1) {
                 throw new Error('Cart is Empty');
             }
-            user.purchasedProducts.push(...user.cart);
+            user.cart.map((item) =>
+                item.isBuy === true
+                    ? user.purchasedProducts.push(item)
+                    : (item.isBuy = true)
+            );
+            user.cart = [];
 
             const userToResp = await this.UserRepository.patch(
                 req.payload.id,
