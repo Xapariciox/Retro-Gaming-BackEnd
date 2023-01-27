@@ -60,7 +60,7 @@ export class ProductController {
         } catch (error) {
             const httpError = new HTTPError(
                 404,
-                'Service unavailable',
+                'service unavailable',
                 (error as Error).message
             );
             next(httpError);
