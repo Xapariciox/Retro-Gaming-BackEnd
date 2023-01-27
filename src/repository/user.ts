@@ -42,8 +42,6 @@ export class UserRepository implements BasicRepo<UserI> {
             throw new mongoose.Error.ValidationError();
         data.password = await passwordEncrypt(data.password);
         const result = await this.#Model.create(data);
-        1;
-        debug(result, 'resultado');
         return result;
     }
     async find(search: Partial<UserI>): Promise<UserI> {
