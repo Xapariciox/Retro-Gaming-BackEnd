@@ -41,3 +41,8 @@ usersRouter.patch(
 );
 usersRouter.patch('/buycart', logged, controller.buyCart.bind(controller));
 usersRouter.patch('/updateuser', logged, controller.patch.bind(controller));
+usersRouter.patch(
+    '/deletePurchasedProducts',
+    logged,
+    controller.deletepurchasedProducts.bind(controller)
+);

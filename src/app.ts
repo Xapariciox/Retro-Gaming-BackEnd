@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
+import { Product } from './entities/product.js';
 import { setCors } from './middlewares/cors.js';
 import { errorManager } from './middlewares/error.js';
 import { productRouter } from './router/product.js';
@@ -55,8 +56,71 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // app.get('/', (_req, res) => {
 //     res.send(template).end();
 // });
+
+Product.insertMany([
+    {
+        name: 'Super Nintendo Classic',
+        image: 'https://www.adslzone.net/app/uploads-adslzone.net/2017/10/snes-classic-mini.jpg',
+        date: '1992',
+        description: '',
+        stock: 20,
+        brand: 'Nintendo',
+        price: 287,
+        category: 'Console',
+    },
+    {
+        name: 'Consola C64 Mini',
+        image: 'https://www.worten.es/blog/wp-content/uploads/2022/04/C64-Mini-300x226.jpg',
+        date: '2018',
+        description: '',
+        stock: 64,
+        brand: 'Nintendo',
+        price: 79.9,
+        category: 'Console',
+    },
+    {
+        name: 'ATARI Flashback 7 Classic',
+        image: 'https://www.worten.es/blog/wp-content/uploads/2022/04/Retro-ATARI-Flashback-7-Classic-300x226.jpg',
+        date: '2004',
+        description: '',
+        stock: 28,
+        brand: 'Nintendo',
+        price: 20,
+        category: 'Console',
+    },
+    {
+        name: 'Nintendo 3DS',
+        image: 'https://static.wikia.nocookie.net/nintendo/images/6/6a/3DS_XL.png/revision/latest?cb=20150106172612&path-prefix=es',
+        date: '2011',
+        description: '',
+        stock: 60,
+        brand: 'Nintendo',
+        price: 50,
+        category: 'Console',
+    },
+    {
+        name: 'SEGA Mega Drive Mini',
+        image: 'https://www.worten.es/blog/wp-content/uploads/2022/04/SEGA-Mega-Drive-Mini-300x226.jpg',
+        date: '2005',
+        description: '',
+        stock: 59,
+        brand: 'SEGA',
+        price: 200,
+        category: 'Console',
+    },
+    {
+        name: 'Nintendo Wii',
+        image: 'https://d1eh9yux7w8iql.cloudfront.net/product_images/128857_5ebbb7e1-df5a-4090-a64c-4565db083bf1.jpg',
+        date: '2006',
+        description: '',
+        stock: 16,
+        brand: 'Blue Night',
+        price: 40,
+        category: 'Console',
+    },
+]);
 app.get('/', (_req, res) => {
-    res.send('Proyecto Final Back Terminado').end();
+    res.send('Back Retro-Gaming').end();
 });
 
 app.use('/users', usersRouter);
