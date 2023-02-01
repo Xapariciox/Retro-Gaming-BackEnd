@@ -222,6 +222,34 @@ export class UserController {
             next(this.#createHttpError(error as Error));
         }
     }
+    async deletePurchasedProducts(
+        req: ExtraRequest,
+        resp: Response,
+        next: NextFunction
+    ) {
+        try {
+            debug('deletePurchasedProducts');
+            if (!req.payload) throw new Error('Not payload');
+            const user = await this.UserRepository.getForMethods(
+                req.payload.id
+            );
+
+            if (user.purchasedProducts.length < 1) {
+                throw new Error('Purchasedroducts is Empty');
+            }
+
+            user.purchasedProducts = [];
+
+            const userToResp = await this.UserRepository.patch(
+                req.payload.id,
+                user
+            );
+            resp.status(202);
+            resp.json({ userToResp });
+        } catch (error) {
+            next(this.#createHttpError(error as Error));
+        }
+    }
     async buyCart(req: ExtraRequest, resp: Response, next: NextFunction) {
         try {
             debug('buyCart');
