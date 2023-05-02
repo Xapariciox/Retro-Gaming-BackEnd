@@ -23,7 +23,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     res.setHeader('Access-Control-Allow-Origin', origin);
     next();
 });
-//ver si es necesario
+//ver si es necesarios
 // const template = `
 //     <body style='align'>
 //         <h1>Proyecto Final Roberto</h1>
