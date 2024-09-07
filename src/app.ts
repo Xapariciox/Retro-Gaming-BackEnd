@@ -5,7 +5,7 @@ import { setCors } from './middlewares/cors.js';
 import { errorManager } from './middlewares/error.js';
 import { productRouter } from './router/product.js';
 import { usersRouter } from './router/users.js';
-
+//a
 export const app = express();
 app.disable('x-powered-by');
 
@@ -13,6 +13,7 @@ const corsOptions = {
     origin: '*',
 };
 app.use(morgan('dev'));
+
 app.use(cors(corsOptions));
 app.use(express.json());
 
